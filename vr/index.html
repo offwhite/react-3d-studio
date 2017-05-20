@@ -23,7 +23,9 @@
   </head>
   <body>
     <div style="color: #fff; position: absolute; left: 60; top: 60; z-index: 999">
-      <span onClick="window.doSomething('Add')">Add</span><br>
+      <span onClick="window.doSomething('Add')">Add</span> | 
+      <span onClick="window.doSomething('Remove')">Remove</span>
+      <br>
       <span onClick="window.doSomething('MoveXMinus')">X-</span>
       |
       <span onClick="window.doSomething('MoveXPlus')">X+</span><br/>
@@ -50,6 +52,10 @@
       <span onClick="window.doSomething('RotateZPlus')">RotateZ+</span>
       |
       <span onClick="window.doSomething('RotateZMinus')">RotateZ-</span>
+      <br/>
+      <br/>
+      <span id="output">
+      </span>
 
     </div>
     <!-- When you're ready to deploy your app, update this line to point to your compiled client.bundle.js -->

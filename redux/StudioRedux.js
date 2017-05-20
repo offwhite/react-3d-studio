@@ -115,7 +115,7 @@ export function exportedFile(state) {
       style={{
         color: '#cccccc ',
         transform: [
-           {translate: [${box.x}, ${box.x}, ${box.x}]},
+           {translate: [${box.x}, ${box.y}, ${box.z}]},
            {rotateY: ${box.rotationX}},
            {rotateX: ${box.rotationY}},
            {rotateZ: ${box.rotationZ}}

@@ -24,13 +24,17 @@ class Objects extends React.Component {
   componentDidMount() {
     react = this
     window.setInterval(function() {
+      react.props.exportFile()
       const CubeModule = NativeModules.CubeModule
-      CubeModule.changeCubeColor(null).then((res) => {
-        const {x, y, z, width, height, depth, rotationX, rotationY, rotationZ} = react.props
+      const {exportedFile} = react.props
+      CubeModule.changeCubeColor(exportedFile).then((res) => {
+        const {x, y, z, width, height, depth, rotationX, rotationY, rotationZ, exportedFile} = react.props
         const rotationAmount = 5
         res.forEach(function (value) {
           if (value.action === 'Add') {
             react.props.addBox()
+          } else if (value.action === 'Remove') {
+            react.props.removeBox()
           } else if (value.action === 'MoveXPlus') {
             react.props.transformBox({x: x+1})
           } else if (value.action === 'MoveXMinus') {
@@ -113,6 +117,7 @@ class Objects extends React.Component {
 
 const mapStateToProps = state => {
   return {
+  exportedFile: state.studio.exportFile,
   boxes: state.studio.boxes,
   x: state.studio.boxes.slice(-1)[0].x,
   y: state.studio.boxes.slice(-1)[0].y,
