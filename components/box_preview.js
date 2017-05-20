@@ -7,35 +7,56 @@ import {
 export default class BoxPreview extends React.Component {
 
   render() {
+    const {
+      width,
+      height,
+      depth,
+      rotationX,
+      rotationY,
+      rotationZ,
+      translationX,
+      translationY,
+      translationZ
+    } = this.props
     return (
       <View>
         <Box
-          dimWidth={2}
-          dimDepth={2}
-          dimHeight={1}
+          dimWidth={width}
+          dimDepth={depth}
+          dimHeight={height}
           style={{
+            layoutOrigin: [0, 0],
             color: '#cccccc',
             transform: [
-               {translate: [3, 0, 0]},
-               {rotateY: 0},
-               {rotateX: 0},
-               {rotateZ: 0}
+               {translate: [
+                 translationX,
+                 translationY,
+                 translationZ
+               ]},
+               {rotateY: rotationY},
+               {rotateX: rotationX},
+               {rotateZ: rotationZ}
              ],
            }}
         />
         <Box
-          dimWidth={2}
-          dimDepth={2}
-          dimHeight={1}
-          wireframe
-          style={{
-            transform: [
-               {translate: [3, 0, 0]},
-               {rotateY: 0},
-               {rotateX: 0},
-               {rotateZ: 0}
-             ],
-           }}
+        dimWidth={width}
+        dimDepth={depth}
+        dimHeight={height}
+        wireframe
+        style={{
+          layoutOrigin: [0, 0],
+          transform: [
+             {translate: [
+               translationX,
+               translationY,
+               translationZ
+             ]},
+             {rotateY: rotationY},
+             {rotateX: rotationX},
+             {rotateZ: rotationZ}
+           ],
+         }}
         />
       </View>
     );
