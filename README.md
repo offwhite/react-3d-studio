@@ -3,14 +3,20 @@
 React studio is a simple modeling application for creating simple, 3d models for
 React VR.
 
-UI for creating, scaling and positioning React VR primitive shapes and exports them
-as React VR a react VR component.
+Provides a UI for creating, scaling and positioning React VR primitive shapes and exports them
+as React component.
 
-It's also built in React VR.
+It's also built in React.
 
 ## What does it do?
 
 Currently only enables you to build and place boxes and then export as React components.
+
+## Example
+
+Current build can be seen here
+
+[3dstudio.jameswhite.website](http://3dstudio.jameswhite.website)
 
 ## What should it do?
 
