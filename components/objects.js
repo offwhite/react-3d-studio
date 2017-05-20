@@ -32,29 +32,29 @@ class Objects extends React.Component {
           if (value.action === 'Add') {
             react.props.addBox()
           } else if (value.action === 'MoveXPlus') {
-            react.props.transformBox({x: x+1})
+            react.props.transformBox({x: x+0.5})
           } else if (value.action === 'MoveXMinus') {
-            react.props.transformBox({x: x-1})
+            react.props.transformBox({x: x-0.5})
           }else if (value.action === 'MoveYPlus') {
-            react.props.transformBox({y: y+1})
+            react.props.transformBox({y: y+0.5})
           } else if (value.action === 'MoveYMinus') {
-            react.props.transformBox({y: y-1})
+            react.props.transformBox({y: y-0.5})
           }else if (value.action === 'MoveZMinus') {
-            react.props.transformBox({z: z-1})
+            react.props.transformBox({z: z-0.5})
           }else if (value.action === 'MoveZPlus') {
-            react.props.transformBox({z: z+1})
+            react.props.transformBox({z: z+0.5})
           } else if (value.action === 'WidthPlus') {
-            react.props.transformBox({width: width+1})
+            react.props.transformBox({width: width+0.5})
           } else if (value.action === 'WidthMinus') {
-            react.props.transformBox({width: width-1})
+            react.props.transformBox({width: width-0.5})
           } else if (value.action === 'HeightPlus') {
-            react.props.transformBox({height: height+1})
+            react.props.transformBox({height: height+0.5})
           } else if (value.action === 'HeightMinus') {
-            react.props.transformBox({height: height-1})
+            react.props.transformBox({height: height-0.5})
           } else if (value.action === 'DepthPlus') {
-            react.props.transformBox({depth: depth+1})
+            react.props.transformBox({depth: depth+0.5})
           } else if (value.action === 'DepthMinus') {
-            react.props.transformBox({depth: depth-1})
+            react.props.transformBox({depth: depth-0.5})
           } else if (value.action === 'RotateXPlus') {
             react.props.transformBox({rotationX: rotationX+rotationAmount})
           } else if (value.action === 'RotateXMinus') {
@@ -71,7 +71,7 @@ class Objects extends React.Component {
           console.log(value)
         })
       })
-    }, 100)
+    }, 500)
   }
 
   renderBox(box, i) {

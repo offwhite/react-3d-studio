@@ -4,12 +4,90 @@
     <style>body { margin: 0; }</style>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://use.fontawesome.com/b3d7c9a98d.js"></script>
+    <style>
+
+      .menu{
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        height: 100vh;
+        width: 200px;
+        background: white;
+        z-index: 999;
+        font-family: helvetica;
+      }
+
+      label{
+        display: block;
+        float:left;
+        width: 100%;
+        height: 30px;
+        color: #cccccc;
+        text-align: center;
+        line-height: 30px;
+      }
+
+      .iconBtn{
+        float: left;
+        width: 49%;
+        height: 50px;
+        border-bottom: solid 1px #cccccc;
+        position: relative;
+        border-bottom: solid 1px #cccccc;
+      }
+
+      .iconBtn:before{
+          content: "\f053";
+          color: #cccccc;
+          font-family: FontAwesome;
+          position: absolute;
+          font-size: 2.2em;
+          top: 5px;
+          left: calc(50% - 15px);
+      }
+
+      .leftBtn:before{
+          content: "\f0a8";
+      }
+
+      .rightBtn:before{
+          content: "\f0a9";
+      }
+
+      .upBtn:before{
+          content: "\f0aa";
+      }
+
+      .downBtn:before{
+          content: "\f0ab";
+      }
+
+      .rotateRightBtn:before{
+          content: "\f01e";
+      }
+
+      .rotateLeftBtn:before{
+          content: "\f0e2";
+      }
+
+      .addBtnRow{
+        float:left;
+        width: 100%;
+        background-color: #54da54;
+      }
+
+      .cubeBtn:before{
+          content: "\f1b2";
+      }
+
+      .circleBtn:before{
+          content: "\f111";
+      }
+    </style>
     <script>
-    console.log("basee window is index.html:")
-    console.log(window)
     window.eventQueue = []
     window.getQueue = function() {
-      console.log("Asdfas")
       tempQueue = window.eventQueue;
       window.eventQueue = [];
       return tempQueue;
@@ -17,39 +95,90 @@
     window.doSomething = function(action) {
       val = $('#rotation').val()
       window.eventQueue.push({action: action})
-      console.log(window.eventQueue)
     }
   </script>
   </head>
   <body>
-    <div style="color: #fff; position: absolute; left: 60; top: 60; z-index: 999">
-      <span onClick="window.doSomething('Add')">Add</span><br>
-      <span onClick="window.doSomething('MoveXMinus')">X-</span>
-      |
-      <span onClick="window.doSomething('MoveXPlus')">X+</span><br/>
-      <span onClick="window.doSomething('MoveYMinus')">Y-</span>
-      |
-      <span onClick="window.doSomething('MoveYPlus')">Y+</span><br/>
-      <span onClick="window.doSomething('MoveZMinus')">Z-</span>
-      |
-      <span onClick="window.doSomething('MoveZPlus')">Z+</span><br/>
-      <span onClick="window.doSomething('WidthPlus')">Width+</span>
-      <span onClick="window.doSomething('WidthMinus')">Width-</span><br/>
-      <span onClick="window.doSomething('HeightMinus')">Height-</span>
-      |
-      <span onClick="window.doSomething('HeightPlus')">Height+</span><br/>
-      <span onClick="window.doSomething('DepthMinus')">Depth-</span>
-      |
-      <span onClick="window.doSomething('DepthPlus')">Depth+</span><br/>
-      <span onClick="window.doSomething('RotateXPlus')">RotateX+</span>
-      |
-      <span onClick="window.doSomething('RotateXMinus')">RotateX-</span><br/>
-      <span onClick="window.doSomething('RotateYPlus')">RotateY+</span>
-      |
-      <span onClick="window.doSomething('RotateYMinus')">RotateY-</span><br/>
-      <span onClick="window.doSomething('RotateZPlus')">RotateZ+</span>
-      |
-      <span onClick="window.doSomething('RotateZMinus')">RotateZ-</span>
+    <div class="menu">
+      <div class="two-button-panel addBtnRow">
+        <label>
+          Create
+        </label>
+        <div class="iconBtn addBtn cubeBtn" onClick="window.doSomething('Add')"></div>
+        <div class="iconBtn addBtn circleBtn" onClick="window.doSomething('Add')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Move in X Axis
+        </label>
+        <div class="iconBtn leftBtn" onClick="window.doSomething('MoveXMinus')"></div>
+        <div class="iconBtn rightBtn" onClick="window.doSomething('MoveXPlus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Move in Y Axis
+        </label>
+        <div class="iconBtn downBtn" onClick="window.doSomething('MoveYMinus')"></div>
+        <div class="iconBtn upBtn" onClick="window.doSomething('MoveYPlus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Move in Z Axis
+        </label>
+        <div class="iconBtn leftBtn" onClick="window.doSomething('MoveZMinus')"></div>
+        <div class="iconBtn rightBtn" onClick="window.doSomething('MoveZPlus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Width
+        </label>
+        <div class="iconBtn leftBtn" onClick="window.doSomething('WidthMinus')"></div>
+        <div class="iconBtn rightBtn" onClick="window.doSomething('WidthPlus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Height
+        </label>
+        <div class="iconBtn upBtn" onClick="window.doSomething('HeightMinus')"></div>
+        <div class="iconBtn downBtn" onClick="window.doSomething('HeightPlus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Depth
+        </label>
+        <div class="iconBtn leftBtn" onClick="window.doSomething('DepthMinus')"></div>
+        <div class="iconBtn rightBtn" onClick="window.doSomething('DepthPlus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Rotate in X axis
+        </label>
+        <div class="iconBtn rotateLeftBtn" onClick="window.doSomething('RotateXPlus')"></div>
+        <div class="iconBtn rotateRightBtn" onClick="window.doSomething('RotateXMinus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Rotate in Y axis
+        </label>
+        <div class="iconBtn rotateLeftBtn" onClick="window.doSomething('RotateYPlus')"></div>
+        <div class="iconBtn rotateRightBtn" onClick="window.doSomething('RotateYMinus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Rotate in Z axis
+        </label>
+        <div class="iconBtn rotateLeftBtn" onClick="window.doSomething('RotateZPlus')"></div>
+        <div class="iconBtn rotateRightBtn" onClick="window.doSomething('RotateZMinus')"></div>
+      </div>
 
     </div>
     <!-- When you're ready to deploy your app, update this line to point to your compiled client.bundle.js -->

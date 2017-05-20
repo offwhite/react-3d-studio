@@ -34,9 +34,9 @@ export const INITIAL_STATE = Immutable({
 })
 
 const defaultBox = {
-  x: 1,
+  x: 0,
   y: 0,
-  z: -10,
+  z: 0,
   width: 1,
   height: 1,
   depth: 1,
