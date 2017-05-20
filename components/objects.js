@@ -8,6 +8,7 @@ import {
 import {connect} from 'react-redux'
 
 import StudioActions from '../redux/StudioRedux'
+import BoxPreview from './box_preview.js'
 
 class Objects extends React.Component {
   constructor(props) {
@@ -24,21 +25,17 @@ class Objects extends React.Component {
     const {x, y, z, width, height, depth, rotationX, rotationY, rotationZ} = box
 
     return (
-      <Box
-        dimWidth={width}
-        dimDepth={depth}
-        dimHeight={height}
-        wireframe={false}
+      <BoxPreview
+        width={width}
+        depth={depth}
+        height={height}
+        rotationX={rotationX}
+        rotationY={rotationY}
+        rotationZ={rotationZ}
+        translationX={x}
+        translationY={y}
+        translationZ={z}
         key={i}
-        style={{
-          layoutOrigin: [0, 0],
-          transform: [
-            {translate: [x, y, z]},
-            {rotateX : rotationX},
-            {rotateY : rotationY},
-            {rotateZ : rotationZ},
-          ]
-        }}
       />
     )
   }

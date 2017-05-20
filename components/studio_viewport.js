@@ -6,7 +6,6 @@ import {
   AmbientLight
 } from 'react-vr';
 import StudioHelperGrids from './studio_helper_grids.js'
-import BoxPreview from './box_preview.js'
 import Objects from './objects.js'
 import Hud from './hud.js'
 
@@ -89,7 +88,7 @@ export default class StudioViewport extends React.Component {
                }}
           >
 
-            
+
 
             <AmbientLight
               intensity={.2}
