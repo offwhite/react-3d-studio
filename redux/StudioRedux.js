@@ -5,7 +5,9 @@ import Immutable from 'seamless-immutable'
 const {Types, Creators} = createActions({
   transformBox: ['changedAttribute'],
   addBox: null,
-  removeCurrentBox: null
+  zoom: ['zoom'],
+  removeCurrentBox: null,
+  exportFile: null
 })
 
 export const StudioTypes = Types
@@ -14,6 +16,8 @@ export default Creators
 /* ------------- Initial State ------------- */
 
 export const INITIAL_STATE = Immutable({
+  exportedFile: '',
+  zoom: 0,
   boxes: [
     {
       x: 0,
@@ -65,6 +69,10 @@ const addNewBox = (boxes) => {
   return Immutable(mutableBoxes)
 }
 
+const zoom = (state, {zoom}) => {
+  return state.merge({zoom})
+}
+
 const removeLastBox = (boxes) => {
   const mutableBoxes = Immutable.asMutable(boxes)
   if (mutableBoxes.length > 1)
@@ -72,9 +80,62 @@ const removeLastBox = (boxes) => {
   return Immutable(mutableBoxes)
 }
 
+export const exportFile = (state) => {
+  const file = exportedFile(state)
+  return state.merge({exportFile: file})
+}
+
+export function exportedFile(state) {
+  console.log('exportFile: ', state)
+  const {boxes} = state
+
+  let initString = `import React from 'react';
+  import {
+    View,
+  } from 'react-vr';
+
+  export default class BoxPreview extends React.Component {
+
+   render() {
+      return (
+        <View>
+`
+
+  const endString = `</View>
+);
+}
+};`
+
+  boxes.map((box, i) => {
+    //return this.renderBox(box, i)
+    let boxString = `<Box
+      dimWidth=${box.width}
+      dimDepth=${box.depth}
+      dimHeight=${box.height}
+      style={{
+        color: '#cccccc ',
+        transform: [
+           {translate: [${box.x}, ${box.x}, ${box.x}]},
+           {rotateY: ${box.rotationX}},
+           {rotateX: ${box.rotationY}},
+           {rotateZ: ${box.rotationZ}}
+         ],
+       }}
+    />`
+
+    initString += boxString
+
+  })
+
+  return initString += endString
+
+}
+
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.TRANSFORM_BOX]: transformCurrentBox,
+  [Types.ZOOM]: zoom,
   [Types.ADD_BOX]: addBox,
   [Types.REMOVE_CURRENT_BOX]: removeBox,
+  [Types.EXPORT_FILE]: exportFile
 
 })

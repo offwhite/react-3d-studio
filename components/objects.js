@@ -76,7 +76,8 @@ const mapDispatchToProps = dispatch => {
   return {
     transformBox: (attr) => dispatch(StudioActions.transformBox(attr)),
     addBox: () => dispatch(StudioActions.addBox()),
-    removeBox: () => dispatch(StudioActions.removeCurrentBox())
+    removeBox: () => dispatch(StudioActions.removeCurrentBox()),
+    exportFile: () => dispatch(StudioActions.exportFile())
   }
 }
 

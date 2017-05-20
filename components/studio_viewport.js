@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux'
 import {
   View,
   VrHeadModel,
@@ -7,9 +8,8 @@ import {
 } from 'react-vr';
 import StudioHelperGrids from './studio_helper_grids.js'
 import Objects from './objects.js'
-import Hud from './hud.js'
 
-export default class StudioViewport extends React.Component {
+class StudioViewport extends React.Component {
 
   constructor() {
     super();
@@ -38,6 +38,14 @@ export default class StudioViewport extends React.Component {
     return radians * 180 / Math.PI;
   }
 
+  zoom() {
+    const {zoom} = this.props
+    scale = 1 + (zoom / 10)
+    if (scale < 0.1)
+      scale = 0.1
+    return 1 + (zoom / 10)
+  }
+
   rotate() {
     radians = VrHeadModel.rotationOfHeadMatrix()
 
@@ -53,6 +61,8 @@ export default class StudioViewport extends React.Component {
   }
 
   render() {
+
+    const {zoom} = this.props
     return (
       <View
         ref="StudioRoot"
@@ -80,6 +90,7 @@ export default class StudioViewport extends React.Component {
             ref="StudioGimbalX"
             style={{
               transform: [
+                 {scale: this.zoom() },
                  {translate: [0, 0, 0]},
                  {rotateY: -this.state.rotation.y},
                  {rotateX: 0},
@@ -117,4 +128,12 @@ export default class StudioViewport extends React.Component {
       </View>
     );
   }
-};
+}
+
+const mapStateToProps = state => {
+  return {
+    zoom: state.studio.zoom
+  }
+}
+
+export default connect(mapStateToProps)(StudioViewport)

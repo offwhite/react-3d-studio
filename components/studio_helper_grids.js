@@ -54,7 +54,7 @@ export default class StudioHelperGrids extends React.Component {
           }}
         >
         {
-           Array.from({length: length}, (value, key) => key).map((i) => {
+           Array.from({length: (length + 1)}, (value, key) => key).map((i) => {
             return this.line(i, 'x', length)
           })
          }
