@@ -3,8 +3,55 @@
     <title>reacthack</title>
     <style>body { margin: 0; }</style>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+    console.log("basee window is index.html:")
+    console.log(window)
+    window.eventQueue = []
+    window.getQueue = function() {
+      console.log("Asdfas")
+      tempQueue = window.eventQueue;
+      window.eventQueue = [];
+      return tempQueue;
+    }
+    window.doSomething = function(action) {
+      val = $('#rotation').val()
+      window.eventQueue.push({action: action})
+      console.log(window.eventQueue)
+    }
+  </script>
   </head>
   <body>
+    <div style="color: #fff; position: absolute; left: 60; top: 60; z-index: 999">
+      <span onClick="window.doSomething('Add')">Add</span><br>
+      <span onClick="window.doSomething('MoveXMinus')">X-</span>
+      |
+      <span onClick="window.doSomething('MoveXPlus')">X+</span><br/>
+      <span onClick="window.doSomething('MoveYMinus')">Y-</span>
+      |
+      <span onClick="window.doSomething('MoveYPlus')">Y+</span><br/>
+      <span onClick="window.doSomething('MoveZMinus')">Z-</span>
+      |
+      <span onClick="window.doSomething('MoveZPlus')">Z+</span><br/>
+      <span onClick="window.doSomething('WidthPlus')">Width+</span>
+      <span onClick="window.doSomething('WidthMinus')">Width-</span><br/>
+      <span onClick="window.doSomething('HeightMinus')">Height-</span>
+      |
+      <span onClick="window.doSomething('HeightPlus')">Height+</span><br/>
+      <span onClick="window.doSomething('DepthMinus')">Depth-</span>
+      |
+      <span onClick="window.doSomething('DepthPlus')">Depth+</span><br/>
+      <span onClick="window.doSomething('RotateXPlus')">RotateX+</span>
+      |
+      <span onClick="window.doSomething('RotateXMinus')">RotateX-</span><br/>
+      <span onClick="window.doSomething('RotateYPlus')">RotateY+</span>
+      |
+      <span onClick="window.doSomething('RotateYMinus')">RotateY-</span><br/>
+      <span onClick="window.doSomething('RotateZPlus')">RotateZ+</span>
+      |
+      <span onClick="window.doSomething('RotateZMinus')">RotateZ-</span>
+
+    </div>
     <!-- When you're ready to deploy your app, update this line to point to your compiled client.bundle.js -->
     <script src="./client.bundle?platform=vr"></script>
     <script>

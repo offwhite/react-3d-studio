@@ -4,6 +4,7 @@ import {
   asset,
   View,
   Box,
+  NativeModules
 } from 'react-vr';
 import {connect} from 'react-redux'
 
@@ -18,6 +19,59 @@ class Objects extends React.Component {
         this.setState({ showText: !this.state.showText });
       }, 1000);
     }
+
+  componentDidMount() {
+    react = this
+    window.setInterval(function() {
+      const CubeModule = NativeModules.CubeModule
+      CubeModule.changeCubeColor(null).then((res) => {
+        const {x, y, z, width, height, depth, rotationX, rotationY, rotationZ} = react.props
+        const rotationAmount = 5
+        res.forEach(function (value) {
+          if (value.action === 'Add') {
+            react.props.addBox()
+          } else if (value.action === 'MoveXPlus') {
+            react.props.transformBox({x: x+1})
+          } else if (value.action === 'MoveXMinus') {
+            react.props.transformBox({x: x-1})
+          }else if (value.action === 'MoveYPlus') {
+            react.props.transformBox({y: y+1})
+          } else if (value.action === 'MoveYMinus') {
+            react.props.transformBox({y: y-1})
+          }else if (value.action === 'MoveZMinus') {
+            react.props.transformBox({z: z-1})
+          }else if (value.action === 'MoveZPlus') {
+            react.props.transformBox({z: z+1})
+          } else if (value.action === 'WidthPlus') {
+            react.props.transformBox({width: width+1})
+          } else if (value.action === 'WidthMinus') {
+            react.props.transformBox({width: width-1})
+          } else if (value.action === 'HeightPlus') {
+            react.props.transformBox({height: height+1})
+          } else if (value.action === 'HeightMinus') {
+            react.props.transformBox({height: height-1})
+          } else if (value.action === 'DepthPlus') {
+            react.props.transformBox({depth: depth+1})
+          } else if (value.action === 'DepthMinus') {
+            react.props.transformBox({depth: depth-1})
+          } else if (value.action === 'RotateXPlus') {
+            react.props.transformBox({rotationX: rotationX+rotationAmount})
+          } else if (value.action === 'RotateXMinus') {
+            react.props.transformBox({rotationX: rotationX-rotationAmount})
+          } else if (value.action === 'RotateYPlus') {
+            react.props.transformBox({rotationY: rotationY+rotationAmount})
+          } else if (value.action === 'RotateYMinus') {
+            react.props.transformBox({rotationY: rotationY-rotationAmount})
+          } else if (value.action === 'RotateZPlus') {
+            react.props.transformBox({rotationZ: rotationZ+rotationAmount})
+          } else if (value.action === 'RotateZMinus') {
+            react.props.transformBox({rotationZ: rotationZ-rotationAmount})
+          }
+          console.log(value)
+        })
+      })
+    }, 100)
+  }
 
   renderBox(box, i) {
 
