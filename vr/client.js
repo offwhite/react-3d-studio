@@ -12,6 +12,7 @@ class CubeModule extends Module {
       this._rnctx = context;
         }
   $changeCubeColor(val, success, fail) {
+    $('#output').text(val)
     this._rnctx.invokeCallback(success, [window.getQueue()]);
   }
 }

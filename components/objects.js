@@ -24,37 +24,41 @@ class Objects extends React.Component {
   componentDidMount() {
     react = this
     window.setInterval(function() {
+      react.props.exportFile()
       const CubeModule = NativeModules.CubeModule
-      CubeModule.changeCubeColor(null).then((res) => {
-        const {x, y, z, width, height, depth, rotationX, rotationY, rotationZ} = react.props
+      const {exportedFile} = react.props
+      CubeModule.changeCubeColor(exportedFile).then((res) => {
+        const {x, y, z, width, height, depth, rotationX, rotationY, rotationZ, exportedFile} = react.props
         const rotationAmount = 5
         res.forEach(function (value) {
           if (value.action === 'Add') {
             react.props.addBox()
+          } else if (value.action === 'Remove') {
+            react.props.removeBox()
           } else if (value.action === 'MoveXPlus') {
-            react.props.transformBox({x: x+0.5})
+            react.props.transformBox({x: x+0.2})
           } else if (value.action === 'MoveXMinus') {
-            react.props.transformBox({x: x-0.5})
+            react.props.transformBox({x: x-0.2})
           }else if (value.action === 'MoveYPlus') {
-            react.props.transformBox({y: y+0.5})
+            react.props.transformBox({y: y+0.2})
           } else if (value.action === 'MoveYMinus') {
-            react.props.transformBox({y: y-0.5})
+            react.props.transformBox({y: y-0.2})
           }else if (value.action === 'MoveZMinus') {
-            react.props.transformBox({z: z-0.5})
+            react.props.transformBox({z: z-0.2})
           }else if (value.action === 'MoveZPlus') {
-            react.props.transformBox({z: z+0.5})
+            react.props.transformBox({z: z+0.2})
           } else if (value.action === 'WidthPlus') {
-            react.props.transformBox({width: width+0.5})
+            react.props.transformBox({width: width+0.2})
           } else if (value.action === 'WidthMinus') {
-            react.props.transformBox({width: width-0.5})
+            react.props.transformBox({width: width-0.2})
           } else if (value.action === 'HeightPlus') {
-            react.props.transformBox({height: height+0.5})
+            react.props.transformBox({height: height+0.2})
           } else if (value.action === 'HeightMinus') {
-            react.props.transformBox({height: height-0.5})
+            react.props.transformBox({height: height-0.2})
           } else if (value.action === 'DepthPlus') {
-            react.props.transformBox({depth: depth+0.5})
+            react.props.transformBox({depth: depth+0.2})
           } else if (value.action === 'DepthMinus') {
-            react.props.transformBox({depth: depth-0.5})
+            react.props.transformBox({depth: depth-0.2})
           } else if (value.action === 'RotateXPlus') {
             react.props.transformBox({rotationX: rotationX+rotationAmount})
           } else if (value.action === 'RotateXMinus') {
@@ -71,7 +75,7 @@ class Objects extends React.Component {
           console.log(value)
         })
       })
-    }, 500)
+    }, 200)
   }
 
   renderBox(box, i) {
@@ -113,6 +117,7 @@ class Objects extends React.Component {
 
 const mapStateToProps = state => {
   return {
+  exportedFile: state.studio.exportFile,
   boxes: state.studio.boxes,
   x: state.studio.boxes.slice(-1)[0].x,
   y: state.studio.boxes.slice(-1)[0].y,

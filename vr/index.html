@@ -16,6 +16,7 @@
         background: white;
         z-index: 999;
         font-family: helvetica;
+        color: #cccccc;
       }
 
       label{
@@ -23,7 +24,6 @@
         float:left;
         width: 100%;
         height: 30px;
-        color: #cccccc;
         text-align: center;
         line-height: 30px;
       }
@@ -39,7 +39,6 @@
 
       .iconBtn:before{
           content: "\f053";
-          color: #cccccc;
           font-family: FontAwesome;
           position: absolute;
           font-size: 2.2em;
@@ -75,16 +74,124 @@
         float:left;
         width: 100%;
         background-color: #54da54;
+        color: white;
       }
 
       .cubeBtn:before{
           content: "\f1b2";
       }
 
-      .circleBtn:before{
-          content: "\f111";
+      .saveBtn:before{
+          content: "\f0c7";
+      }
+
+      .outputContainer{
+        position: absolute;
+        width: 100%;
+        display: none;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.72);
+        z-index: 1000;
+        padding-top: 100px;
+      }
+
+      #output{
+        background-color: black;
+        color: limegreen;
+        display: block;
+        margin: auto;
+        width: 600px;
+        height: 50%;
+        padding:10px;
+        overflow: scroll;
       }
     </style>
+  </head>
+  <body>
+    <div class="menu">
+      <div class="two-button-panel addBtnRow">
+        <div class="iconBtn addBtn cubeBtn" onClick="window.updateView('Add')"></div>
+        <div class="iconBtn addBtn saveBtn" onClick="showOutput()"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Move in X Axis
+        </label>
+        <div class="iconBtn leftBtn" onClick="window.updateView('MoveXMinus')"></div>
+        <div class="iconBtn rightBtn" onClick="window.updateView('MoveXPlus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Move in Z Axis
+        </label>
+        <div class="iconBtn downBtn" onClick="window.updateView('MoveYMinus')"></div>
+        <div class="iconBtn upBtn" onClick="window.updateView('MoveYPlus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Move in Y Axis
+        </label>
+        <div class="iconBtn leftBtn" onClick="window.updateView('MoveZMinus')"></div>
+        <div class="iconBtn rightBtn" onClick="window.updateView('MoveZPlus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Width
+        </label>
+        <div class="iconBtn leftBtn" onClick="window.updateView('WidthMinus')"></div>
+        <div class="iconBtn rightBtn" onClick="window.updateView('WidthPlus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Height
+        </label>
+        <div class="iconBtn downBtn" onClick="window.updateView('HeightMinus')"></div>
+        <div class="iconBtn upBtn" onClick="window.updateView('HeightPlus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Depth
+        </label>
+        <div class="iconBtn leftBtn" onClick="window.updateView('DepthMinus')"></div>
+        <div class="iconBtn rightBtn" onClick="window.updateView('DepthPlus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Rotate in X axis
+        </label>
+        <div class="iconBtn rotateLeftBtn" onClick="window.updateView('RotateXPlus')"></div>
+        <div class="iconBtn rotateRightBtn" onClick="window.updateView('RotateXMinus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Rotate in Y axis
+        </label>
+        <div class="iconBtn rotateLeftBtn" onClick="window.updateView('RotateYPlus')"></div>
+        <div class="iconBtn rotateRightBtn" onClick="window.updateView('RotateYMinus')"></div>
+      </div>
+
+      <div class="two-button-panel">
+        <label>
+          Rotate in Z axis
+        </label>
+        <div class="iconBtn rotateLeftBtn" onClick="window.updateView('RotateZPlus')"></div>
+        <div class="iconBtn rotateRightBtn" onClick="window.updateView('RotateZMinus')"></div>
+      </div>
+
+    </div>
+
+    <div class="outputContainer"  onClick="hideOutput()">
+      <pre id="output"></pre>
+    </div>
+
     <script>
     window.eventQueue = []
     window.getQueue = function() {
@@ -92,103 +199,26 @@
       window.eventQueue = [];
       return tempQueue;
     }
-    window.doSomething = function(action) {
-      val = $('#rotation').val()
+    window.updateView = function(action) {
       window.eventQueue.push({action: action})
     }
+    showOutput = function(){
+      $('.outputContainer').fadeIn();
+    }
+    hideOutput = function(){
+      $('.outputContainer').fadeOut();
+    }
   </script>
-  </head>
-  <body>
-    <div class="menu">
-      <div class="two-button-panel addBtnRow">
-        <label>
-          Create
-        </label>
-        <div class="iconBtn addBtn cubeBtn" onClick="window.doSomething('Add')"></div>
-        <div class="iconBtn addBtn circleBtn" onClick="window.doSomething('Add')"></div>
-      </div>
 
-      <div class="two-button-panel">
-        <label>
-          Move in X Axis
-        </label>
-        <div class="iconBtn leftBtn" onClick="window.doSomething('MoveXMinus')"></div>
-        <div class="iconBtn rightBtn" onClick="window.doSomething('MoveXPlus')"></div>
-      </div>
-
-      <div class="two-button-panel">
-        <label>
-          Move in Y Axis
-        </label>
-        <div class="iconBtn downBtn" onClick="window.doSomething('MoveYMinus')"></div>
-        <div class="iconBtn upBtn" onClick="window.doSomething('MoveYPlus')"></div>
-      </div>
-
-      <div class="two-button-panel">
-        <label>
-          Move in Z Axis
-        </label>
-        <div class="iconBtn leftBtn" onClick="window.doSomething('MoveZMinus')"></div>
-        <div class="iconBtn rightBtn" onClick="window.doSomething('MoveZPlus')"></div>
-      </div>
-
-      <div class="two-button-panel">
-        <label>
-          Width
-        </label>
-        <div class="iconBtn leftBtn" onClick="window.doSomething('WidthMinus')"></div>
-        <div class="iconBtn rightBtn" onClick="window.doSomething('WidthPlus')"></div>
-      </div>
-
-      <div class="two-button-panel">
-        <label>
-          Height
-        </label>
-        <div class="iconBtn upBtn" onClick="window.doSomething('HeightMinus')"></div>
-        <div class="iconBtn downBtn" onClick="window.doSomething('HeightPlus')"></div>
-      </div>
-
-      <div class="two-button-panel">
-        <label>
-          Depth
-        </label>
-        <div class="iconBtn leftBtn" onClick="window.doSomething('DepthMinus')"></div>
-        <div class="iconBtn rightBtn" onClick="window.doSomething('DepthPlus')"></div>
-      </div>
-
-      <div class="two-button-panel">
-        <label>
-          Rotate in X axis
-        </label>
-        <div class="iconBtn rotateLeftBtn" onClick="window.doSomething('RotateXPlus')"></div>
-        <div class="iconBtn rotateRightBtn" onClick="window.doSomething('RotateXMinus')"></div>
-      </div>
-
-      <div class="two-button-panel">
-        <label>
-          Rotate in Y axis
-        </label>
-        <div class="iconBtn rotateLeftBtn" onClick="window.doSomething('RotateYPlus')"></div>
-        <div class="iconBtn rotateRightBtn" onClick="window.doSomething('RotateYMinus')"></div>
-      </div>
-
-      <div class="two-button-panel">
-        <label>
-          Rotate in Z axis
-        </label>
-        <div class="iconBtn rotateLeftBtn" onClick="window.doSomething('RotateZPlus')"></div>
-        <div class="iconBtn rotateRightBtn" onClick="window.doSomething('RotateZMinus')"></div>
-      </div>
-
-    </div>
     <!-- When you're ready to deploy your app, update this line to point to your compiled client.bundle.js -->
-    <script src="./client.bundle?platform=vr"></script>
+    <script src="./client.bundle.?platform=vr"></script> <!-- was no js j: -->
     <script>
       // Initialize the React VR application
       ReactVR.init(
         // When you're ready to deploy your app, update this line to point to
         // your compiled index.bundle.js
-        '../index.vr.bundle?platform=vr&dev=true',
+        // './index.bundle.js',
+        '../index.vr.bundle?platform=vr',
         // Attach it to the body tag
         document.body
       );
