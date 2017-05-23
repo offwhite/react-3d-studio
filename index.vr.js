@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Provider} from 'react-redux'
-import StudioViewport from './components/studio_viewport.js'
+import StudioViewport from './components/StudioViewport.js'
 import createStore from './redux/index'
 import {AppRegistry} from 'react-vr';
 

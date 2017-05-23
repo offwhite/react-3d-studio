@@ -1,36 +1,21 @@
 {
-  "name": "reacthack",
-  "version": "0.0.1",
+  "name": "react-3d-studio-v2",
+  "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "start": "node -e \"console.log('open browser at http://localhost:8081/vr/\\n\\n');\" && node node_modules/react-native/local-cli/cli.js start",
-    "bundle": "node node_modules/react-vr/scripts/bundle.js",
-    "open": "node -e \"require('xopen')('http://localhost:8081/vr/')\"",
-    "devtools": "react-devtools",
-    "test": "jest"
-  },
   "dependencies": {
-    "ovrui": "^1.1.0",
-    "react": "~15.4.1",
-    "react-native": "~0.42.0",
-    "react-redux": "",
-    "react-vr": "^1.1.0",
-    "react-vr-web": "^1.1.0",
-    "redux": "",
-    "redux-logger": "^3.0.6",
-    "reduxsauce": "",
-    "seamless-immutable": "^7.1.2",
-    "three": "^0.80.1"
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-three": "^0.9.7",
+    "react-three-renderer": "^3.1.0",
+    "three": "^0.85.2"
   },
   "devDependencies": {
-    "babel-jest": "^19.0.0",
-    "babel-preset-react-native": "^1.9.1",
-    "jest": "^19.0.2",
-    "react-devtools": "^2.1.3",
-    "react-test-renderer": "~15.4.1",
-    "xopen": "1.0.0"
+    "react-scripts": "1.0.4"
   },
-  "jest": {
-    "preset": "react-vr"
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   }
 }

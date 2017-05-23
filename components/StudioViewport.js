@@ -6,8 +6,8 @@ import {
   PointLight,
   AmbientLight
 } from 'react-vr';
-import StudioHelperGrids from './studio_helper_grids.js'
-import Objects from './objects.js'
+import ViewportGrid from './ViewportGrid.js'
+import EditablePrimitives from './EditablePrimitives.js'
 
 class StudioViewport extends React.Component {
 
@@ -121,8 +121,8 @@ class StudioViewport extends React.Component {
                  }}
             />
 
-            <StudioHelperGrids />
-            <Objects />
+          <ViewportGrid />
+            <EditablePrimitives />
           </View>
         </View>
       </View>

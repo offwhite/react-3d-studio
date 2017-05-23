@@ -5,7 +5,7 @@ import {
   Cylinder
 } from 'react-vr';
 
-export default class StudioHelperGrids extends React.Component {
+export default class ViewportGrid extends React.Component {
 
   line(index, orientation, length){
     const scaledLength = length * 2

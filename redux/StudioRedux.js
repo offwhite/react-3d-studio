@@ -20,6 +20,7 @@ export const INITIAL_STATE = Immutable({
   zoom: 0,
   boxes: [
     {
+      selected: false,
       x: 0,
       y: 0,
       z: 0,
@@ -34,6 +35,7 @@ export const INITIAL_STATE = Immutable({
 })
 
 const defaultBox = {
+  selected: true,
   x: 0,
   y: 0,
   z: 0,
@@ -47,7 +49,6 @@ const defaultBox = {
 
 /* ------------- Reducers ------------- */
 
-// we're attempting to login
 export const transformCurrentBox = (state, {changedAttribute}) => {
   const lastIndex = state.boxes.length - 1
   const changedAttributeName = Object.keys(changedAttribute)[0]
@@ -73,6 +74,7 @@ const zoom = (state, {zoom}) => {
   return state.merge({zoom})
 }
 
+// get list of boxes, make it mutable, add to it, make it immutable, return it
 const removeLastBox = (boxes) => {
   const mutableBoxes = Immutable.asMutable(boxes)
   if (mutableBoxes.length > 1)
@@ -94,7 +96,7 @@ export function exportedFile(state) {
     View,
   } from 'react-vr';
 
-  export default class BoxPreview extends React.Component {
+  export default class 3dStudio extends React.Component {
 
    render() {
       return (

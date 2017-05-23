@@ -1,13 +1,18 @@
 import React from 'react';
 import {
-  View,
+  VrButton,
   Box
 } from 'react-vr';
 
 export default class BoxPreview extends React.Component {
 
+  selectBox() {
+    console.log('box selected')
+  }
+
   render() {
     const {
+      selected,
       width,
       height,
       depth,
@@ -18,15 +23,20 @@ export default class BoxPreview extends React.Component {
       translationY,
       translationZ
     } = this.props
+
+    const color = selected ? '#66cc66' : '#cccccc'
+
     return (
-      <View>
+      <VrButton
+        onClick={()=>this.selectBox()}>
         <Box
           dimWidth={width}
           dimDepth={depth}
           dimHeight={height}
           style={{
             layoutOrigin: [0, 0],
-            color: '#cccccc',
+            color: color,
+            // change this to a transform matrix: https://facebook.github.io/react-vr/docs/3dcoordinates-and-transforms.html#transform-properties
             transform: [
                {translate: [
                  translationX,
@@ -58,7 +68,7 @@ export default class BoxPreview extends React.Component {
            ],
          }}
         />
-      </View>
+      </VrButton>
     );
   }
 };

@@ -9,9 +9,9 @@ import {
 import {connect} from 'react-redux'
 
 import StudioActions from '../redux/StudioRedux'
-import BoxPreview from './box_preview.js'
+import BoxPreview from './BoxPreview.js'
 
-class Objects extends React.Component {
+class EditablePrimitives extends React.Component {
   constructor(props) {
       super(props);
       // Toggle the state every second
@@ -27,6 +27,8 @@ class Objects extends React.Component {
       react.props.exportFile()
       const CubeModule = NativeModules.CubeModule
       const {exportedFile} = react.props
+      // the argument passed is what we're sending back to the browser
+      // returns a promise which is an array of things to do
       CubeModule.changeCubeColor(exportedFile).then((res) => {
         const {x, y, z, width, height, depth, rotationX, rotationY, rotationZ, exportedFile} = react.props
         const rotationAmount = 5
@@ -75,15 +77,16 @@ class Objects extends React.Component {
           console.log(value)
         })
       })
-    }, 200)
+    }, 500)
   }
 
   renderBox(box, i) {
 
-    const {x, y, z, width, height, depth, rotationX, rotationY, rotationZ} = box
+    const {selected, x, y, z, width, height, depth, rotationX, rotationY, rotationZ} = box
 
     return (
       <BoxPreview
+        selected={selected}
         width={width}
         depth={depth}
         height={height}
@@ -140,4 +143,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Objects)
+export default connect(mapStateToProps, mapDispatchToProps)(EditablePrimitives)
