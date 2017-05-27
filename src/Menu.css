@@ -1,0 +1,15 @@
+.menu {
+  width: 100%;
+  height: 50px;
+  background-color: #a3aeb9;
+  position: absolute;
+  top: 0;
+  padding: 5px;
+}
+
+.button {
+  margin: 10px;
+  border: solid 1px #666666;
+  padding: 5px;
+  float: left;
+}
