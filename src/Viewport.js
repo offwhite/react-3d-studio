@@ -24,6 +24,9 @@ class Viewport extends React.Component {
   // 5. [done] move mesh into component
   // 6. look at axis helper
   // 7. grid helper
+  // 8. [done] select primitive
+  // 9. [done] move primitive
+  // 10. [done] make new created primitive selected by default
 
 
   constructor(props, context) {

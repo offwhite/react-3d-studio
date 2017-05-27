@@ -68,7 +68,8 @@ const addPrimitive = (state, {primitiveType}) => {
   const newObjectList = addPrimitiveToArray(state.primitivesList, newObject)
 
   return state.merge({
-    primitivesList: newObjectList
+    primitivesList: newObjectList,
+    selectedPrimitiveId: (newObjectList.length - 1)
   })
 }
 
