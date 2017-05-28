@@ -17,8 +17,8 @@ export default Creators
 /* ------------- Initial State ------------- */
 
 const defaultCamera = {
-  position: new THREE.Vector3(0, 400, 1000),
-  rotation: new THREE.Euler(0,0,0)
+  position: new THREE.Vector3(-500, 400, 800),
+  rotation: new THREE.Euler(0,0,10)
 }
 
 const defaultLight = {

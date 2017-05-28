@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import * as THREE from 'three'
 import MouseInput from '../../lib/MouseInput';
 
@@ -54,7 +55,7 @@ class Sphere extends Component {
       name
     } = this.props
 
-    const _color = selected ? '#ff0000' : color
+    const _color = selected ? '#a1bcde' : color
 
     return (
       <group>

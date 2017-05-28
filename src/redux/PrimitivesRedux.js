@@ -4,7 +4,8 @@ import Immutable from 'seamless-immutable'
 const {Types, Creators} = createActions({
   addPrimitive: ['primitiveType'],
   selectPrimitive: ['primitiveId'],
-  movePrimitive: ['distance', 'axis']
+  movePrimitive: ['distance', 'axis'],
+  highlightPrimitive: ['primitiveId']
 })
 
 export const StudioTypes = Types
@@ -18,9 +19,9 @@ const defaults = {
     size: {
       width: 100,
       height: 100,
-      depth: 100,
+      depth: 600,
     },
-    position: {x:0, y:0, z:0},
+    position: {x:0, y:50, z:0},
     rotation: {x:0, y:0, z:0},
     color: '#cccccc',
     selected: false
@@ -73,6 +74,13 @@ const addPrimitive = (state, {primitiveType}) => {
   })
 }
 
+const highlightPrimitive = (state, {primitiveId}) => {
+  if (primitiveId === state.selectedPrimitiveId)
+    return state.merge({selectedPrimitiveId: null})
+
+  return state.merge({selectedPrimitiveId: primitiveId})
+}
+
 const selectPrimitive = (state, {primitiveId}) => {
   if (primitiveId === state.selectedPrimitiveId)
     return state.merge({selectedPrimitiveId: null})
@@ -104,6 +112,7 @@ const movePrimitive = (state, {distance, axis}) => {
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.ADD_PRIMITIVE]: addPrimitive,
+  [Types.HIGHLIGHT_PRIMITIVE]: highlightPrimitive,
   [Types.SELECT_PRIMITIVE]: selectPrimitive,
   [Types.MOVE_PRIMITIVE]: movePrimitive
 })

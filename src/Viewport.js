@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import React3 from 'react-three-renderer'
+import * as THREE from 'three'
 import './Studio.css'
 
 import TrackballControls from './ref/TrackballControlls';
@@ -175,6 +176,7 @@ class Viewport extends React.Component {
         gammaInput
         gammaOutput
         shadowMapEnabled
+        shadowMapType={THREE.PCFShadowMap}
         clearColor={0x666666}
       >
         <module
@@ -189,7 +191,7 @@ class Viewport extends React.Component {
             fov={75}
             aspect={width / height}
             near={0.1}
-            far={5000}
+            far={8000}
             position={cameraState.position}
             rotation={cameraState.rotation}
           />
@@ -200,7 +202,8 @@ class Viewport extends React.Component {
             shouldShowGrid && <gridHelper
               size={5000}
               step={50}
-              colorCenterLine={0xffffff}
+              colorGrid={0xff0000}
+              colorCenterLine={'#ff0000'}
             />
           }
 
