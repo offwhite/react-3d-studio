@@ -29,7 +29,9 @@ const defaults = {
   },
   sphere: {
     type: 'sphere',
-    radius: 75,
+    size: {
+      radius: 75
+    },
     position: {x:0, y:0, z:0},
     rotation: {x:0, y:0, z:0},
     color: '#cccccc',

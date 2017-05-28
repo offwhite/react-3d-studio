@@ -39,7 +39,7 @@ export const INITIAL_STATE = Immutable({
   camera: defaultCamera,
   light: defaultLight,
   shouldShowGrid: true,
-  showWireframe: true,
+  showWireframe: false,
   resetCamera: false
 })
 

@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import * as THREE from 'three'
 import MouseInput from '../lib/MouseInput'
 
-import Box from './Primitives/Box'
-import Sphere from './Primitives/Sphere'
+import Primitive from './Primitives/Primitive'
 
 class Primitives extends Component {
 
@@ -49,7 +48,7 @@ class Primitives extends Component {
     return new THREE.Euler( rotation.x, rotation.y, rotation.z, 'XYZ' )
   }
 
-  renderBox(primitive, key, onCreate, selected) {
+  renderPrimitive(primitive, key, onCreate, selected) {
     const {
       mouseInput,
       camera,
@@ -57,8 +56,9 @@ class Primitives extends Component {
       setPrimitivePosition,
       showWireframe
     } = this.props
+
     return(
-      <Box
+      <Primitive
         onCreate={onCreate}
         id={key}
         key={key}
@@ -68,30 +68,11 @@ class Primitives extends Component {
         selected={selected}
         setPrimitivePosition={setPrimitivePosition}
         showWireframe={showWireframe}
+        type={primitive.type}
 
         position={this.vector(primitive.position)}
         rotation={this.euler(primitive.rotation)}
         size={primitive.size}
-        color={primitive.color}
-      />
-    )
-  }
-
-  renderSphere(primitive, key, onCreate, selected) {
-    const { mouseInput, camera, selectPrimitive } = this.props
-    return(
-      <Sphere
-        onCreate={onCreate}
-        id={key}
-        key={key}
-        mouseInput={mouseInput}
-        camera={camera}
-        selectPrimitive={selectPrimitive}
-        selected={selected}
-
-        position={this.vector(primitive.position)}
-        rotation={this.euler(primitive.rotation)}
-        radius={primitive.radius}
         color={primitive.color}
       />
     )
@@ -107,10 +88,7 @@ class Primitives extends Component {
           primitivesList.map((primitive, key) => {
             const onCreate = this._onPrimitivesCreate.bind(this, key);
             const selected = (selectedPrimitiveId === key)
-            return {
-              'box':    this.renderBox(primitive, key, onCreate, selected),
-              'sphere': this.renderSphere(primitive, key, onCreate, selected),
-            }[primitive.type]
+            return this.renderPrimitive(primitive, key, onCreate, selected)
           })
         }
       </group>
