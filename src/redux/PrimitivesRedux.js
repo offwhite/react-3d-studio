@@ -54,9 +54,9 @@ const addPrimitiveToArray = (primitives, primitive) => {
 const transformPrimitivePosition = (primitive, distance, axis) => {
   const mutablePrimitive = Immutable.asMutable(primitive)
   mutablePrimitive.position = {
-    x: axis == 'x' ? (primitive.position.x + distance) : primitive.position.x,
-    y: axis == 'y' ? (primitive.position.y + distance) : primitive.position.y,
-    z: axis == 'z' ? (primitive.position.z + distance) : primitive.position.z,
+    x: axis === 'x' ? (primitive.position.x + distance) : primitive.position.x,
+    y: axis === 'y' ? (primitive.position.y + distance) : primitive.position.y,
+    z: axis === 'z' ? (primitive.position.z + distance) : primitive.position.z,
   }
   return Immutable(mutablePrimitive)
 }
@@ -74,14 +74,14 @@ const addPrimitive = (state, {primitiveType}) => {
 }
 
 const selectPrimitive = (state, {primitiveId}) => {
-  if (primitiveId == state.selectedPrimitiveId)
+  if (primitiveId === state.selectedPrimitiveId)
     return state.merge({selectedPrimitiveId: null})
 
   return state.merge({selectedPrimitiveId: primitiveId})
 }
 
 const movePrimitive = (state, {distance, axis}) => {
-  if (state.selectedPrimitiveId == null)
+  if (state.selectedPrimitiveId === null)
     return state
 
   // make primitives mutable

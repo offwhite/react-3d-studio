@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react'
-import {connect} from 'react-redux'
 import * as THREE from 'three'
 import MouseInput from '../../lib/MouseInput';
 
@@ -11,6 +10,7 @@ class Box extends Component {
       id:         PropTypes.integer.isRequired,
       mouseInput: PropTypes.instanceOf(MouseInput),
       camera:     PropTypes.instanceOf(THREE.PerspectiveCamera),
+
       position:   PropTypes.object.isRequired,
       rotation:   PropTypes.object.isRequired,
       size:       PropTypes.object.isRequired,
@@ -44,14 +44,7 @@ class Box extends Component {
     onCreate(mesh);
   };
 
-  _color = () => {
-    const {selected, color} = this.props
-    if (selected)
-      return '#ff0000'
-    return color
-  }
-
-  /* -- end moving ------- */
+  /* -- end mouse interation ------- */
 
   render() {
 
@@ -59,10 +52,11 @@ class Box extends Component {
       position,
       rotation,
       size,
-      selected,
-      id,
-      name
+      color,
+      selected
     } = this.props
+
+    const _color = selected ? '#ff0000' : color
 
     return (
       <group>
@@ -79,12 +73,12 @@ class Box extends Component {
         ref={this._ref}
       >
         <boxGeometry
-          width={100}
-          height={100}
-          depth={100}
+          width={size.width}
+          height={size.height}
+          depth={size.depth}
         />
         <meshLambertMaterial
-          color={this._color()}
+          color={_color}
         />
       </mesh>
     </group>

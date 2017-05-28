@@ -13,3 +13,7 @@
   padding: 5px;
   float: left;
 }
+
+.button.active {
+  background: #bcc7d2;
+}

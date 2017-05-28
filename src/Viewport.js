@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {connect} from 'react-redux'
 
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
@@ -20,13 +20,14 @@ class Viewport extends React.Component {
   // 1. [done] move lighting to a lighting component
   // 2. [not doing] place camera control into a component
   // 3. [done] allow camera reset
-  // 4. add orientation grid
+  // 4. [dupe] add orientation grid
   // 5. [done] move mesh into component
   // 6. look at axis helper
-  // 7. grid helper
+  // 7. [done] grid helper
   // 8. [done] select primitive
   // 9. [done] move primitive
   // 10. [done] make new created primitive selected by default
+  // 11. gizmo - use arrowHelpers :)
 
 
   constructor(props, context) {
@@ -41,6 +42,8 @@ class Viewport extends React.Component {
     // construct the position vector here, because if we use 'new' within render,
     // React will think that things have changed when they have not.
   }
+
+  shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate;
 
   // ==== LOAD ====
 
@@ -67,7 +70,7 @@ class Viewport extends React.Component {
 
     this.controls = controls;
 
-    this.controls.addEventListener('change', this._onTrackballChange);
+    //this.controls.addEventListener('change', this._onTrackballChange);
   }
 
   componentDidUpdate(newProps) {
@@ -103,6 +106,9 @@ class Viewport extends React.Component {
   };
 
   _onAnimateInternal() {
+
+    const { resetCamera, resetCameraComplete } = this.props
+
     const {
       mouseInput,
       camera,
@@ -114,10 +120,8 @@ class Viewport extends React.Component {
         container,
       } = this.refs;
 
-      console.log(this.primitives)
-
       mouseInput.ready(scene, container, camera)
-      mouseInput.restrictIntersections(this.primitives);
+      mouseInput.restrictIntersections(this.primitives)
       mouseInput.setActive(false)
     }
 
@@ -127,19 +131,16 @@ class Viewport extends React.Component {
     if (this.state.camera !== camera)
       this.setState({camera})
 
-    this.controls.update();
+    this.controls.update()
+
+    if (resetCamera){
+      this.controls.reset()
+      resetCameraComplete()
+    }
+
   }
 
   // ===== EVENTS =====
-
-  _onTrackballChange = () => {
-    // dispatch this shit yeah?
-    const {setCamera} = this.props
-    setCamera(
-      this.refs.camera.position.clone(),
-      this.refs.camera.rotation.clone()
-    )
-  };
 
   // ===== RENDER =====
 
@@ -155,6 +156,7 @@ class Viewport extends React.Component {
     const {
       cameraState,
       lightState,
+      shouldShowGrid,
       primitivesList,
       selectPrimitive,
       selectedPrimitiveId
@@ -173,23 +175,35 @@ class Viewport extends React.Component {
         gammaInput
         gammaOutput
         shadowMapEnabled
+        clearColor={0x666666}
       >
         <module
           ref="mouseInput"
           descriptor={MouseInput}
         />
         <scene ref="scene">
+
           <perspectiveCamera
             ref='camera'
             name="mainCamera"
             fov={75}
             aspect={width / height}
             near={0.1}
-            far={2000}
+            far={5000}
             position={cameraState.position}
             rotation={cameraState.rotation}
           />
+
           <Lights lightState={lightState} />
+
+          {
+            shouldShowGrid && <gridHelper
+              size={5000}
+              step={50}
+              colorCenterLine={0xffffff}
+            />
+          }
+
           <Primitives
             primitivesList={primitivesList}
             mouseInput={mouseInput}
@@ -208,8 +222,10 @@ class Viewport extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    resetCamera:         state.viewport.resetCamera,
     cameraState:         state.viewport.camera,
     lightState:          state.viewport.light,
+    shouldShowGrid:      state.viewport.shouldShowGrid,
     primitivesList:      state.primitives.primitivesList,
     selectedPrimitiveId: state.primitives.selectedPrimitiveId
   }
@@ -218,6 +234,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) =>{
   return {
     startApp: () => dispatch(ViewportActions.startApp()),
+    resetCameraComplete: () => dispatch(ViewportActions.resetCameraComplete()),
     setCamera: (cameraPosition, cameraRotation) =>
       dispatch(ViewportActions.setCamera(cameraPosition, cameraRotation)),
     selectPrimitive: (primitiveId) => dispatch(PrimitivesActions.selectPrimitive(primitiveId))

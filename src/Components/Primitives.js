@@ -44,29 +44,32 @@ class Primitives extends Component {
         mouseInput={mouseInput}
         camera={camera}
         selectPrimitive={selectPrimitive}
+        selected={selected}
+
         position={this.vector(primitive.position)}
         rotation={this.euler(primitive.rotation)}
         size={primitive.size}
         color={primitive.color}
-        selected={selected}
       />
     )
   }
 
-  renderSphere(primitive, key, onCreate) {
-    const { mouseInput, camera } = this.props
+  renderSphere(primitive, key, onCreate, selected) {
+    const { mouseInput, camera, selectPrimitive } = this.props
     return(
       <Sphere
         onCreate={onCreate}
         id={key}
         key={key}
         mouseInput={mouseInput}
+        camera={camera}
+        selectPrimitive={selectPrimitive}
+        selected={selected}
+
         position={this.vector(primitive.position)}
         rotation={this.euler(primitive.rotation)}
         radius={primitive.radius}
         color={primitive.color}
-        selected={false}
-        key={key}
       />
     )
   }
@@ -80,7 +83,7 @@ class Primitives extends Component {
         {
           primitivesList.map((primitive, key) => {
             const onCreate = this._onPrimitivesCreate.bind(this, key);
-            const selected = (selectedPrimitiveId == key)
+            const selected = (selectedPrimitiveId === key)
             return {
               'box':    this.renderBox(primitive, key, onCreate, selected),
               'sphere': this.renderSphere(primitive, key, onCreate, selected),

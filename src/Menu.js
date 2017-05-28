@@ -26,9 +26,26 @@ class Menu extends Component {
     movePrimitive(distance, axis)
   }
 
+  toggleShowGrid() {
+    const { toggleShowGrid, shouldShowGrid } = this.props
+    toggleShowGrid()
+    console.log('current grid value' , shouldShowGrid)
+
+  }
+
   render() {
+    const { shouldShowGrid, cunty } = this.props
+
+   console.log(cunty)
+
     return (
       <div className='menu'>
+        <div
+          className={shouldShowGrid ? 'button active' : 'button'}
+          onClick={() => {this.toggleShowGrid()}}
+          >
+          Grid
+        </div>
         <div
           className='button'
           onClick={() => {this.resetCamera()}}
@@ -88,13 +105,20 @@ class Menu extends Component {
   }
 }
 
-const mapStateToProps = state => {}
+const mapStateToProps = state => {
+  return {
+    shouldShowGrid: state.viewport.shouldShowGrid
+  }
+}
 
 const mapDispatchToProps = (dispatch) =>{
   return {
     resetCamera: () => dispatch(ViewportActions.resetCamera()),
-    addPrimitive: (primitiveType) => dispatch(PrimitivesActions.addPrimitive(primitiveType)),
-    movePrimitive: (distance, axis) => dispatch(PrimitivesActions.movePrimitive(distance, axis))
+    toggleShowGrid: () => dispatch(ViewportActions.toggleShowGrid()),
+    addPrimitive: (primitiveType) =>
+      dispatch(PrimitivesActions.addPrimitive(primitiveType)),
+    movePrimitive: (distance, axis) =>
+      dispatch(PrimitivesActions.movePrimitive(distance, axis))
   }
 }
 
