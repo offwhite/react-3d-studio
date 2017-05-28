@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import * as THREE from 'three'
-import MouseInput from '../lib/MouseInput';
+import MouseInput from '../ref/MouseInput';
 
 // shared plane for dragging purposes
 // it's good to share because you can drag only one cube at a time
@@ -28,7 +28,7 @@ class MoveGizmo extends Component {
     this.overlap = 100
     this.shaftRadius = 1
     this.headHeight = 60
-    this.headRadius = 10
+    this.headRadius = 20
     this.moveAxis = 'x'
   }
 

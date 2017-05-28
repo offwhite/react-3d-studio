@@ -5,10 +5,14 @@
   position: absolute;
   top: 0;
   padding: 5px;
+  z-index: 10;
+  box-sizing: border-box;
+  border-bottom: solid 1px #666666;
+  box-shadow: 0 0 10px 0px black;
 }
 
 .button {
-  margin: 10px;
+  margin: 5px;
   border: solid 1px #666666;
   padding: 5px;
   float: left;

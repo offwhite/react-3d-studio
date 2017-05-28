@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import * as THREE from 'three'
-import MouseInput from '../../lib/MouseInput'
+import MouseInput from '../ref/MouseInput'
 
-import MoveGizmo from '../MoveGizmo'
+import MoveGizmo from './MoveGizmo'
 
-class Box extends Component {
+class Primitive extends Component {
 
   static propTypes() {
     return {
@@ -21,6 +21,7 @@ class Box extends Component {
       color:                PropTypes.string.isRequired,
       selected:             PropTypes.bool,
       name:                 PropTypes.string,
+      type:                 PropTypes.string.isRequired
     }
   }
 
@@ -49,6 +50,43 @@ class Box extends Component {
 
   /* -- end mouse interation ------- */
 
+  getGixmoSizes(){
+    const { type, size } = this.props
+    return {
+      box: size,
+      sphere: {width: size.radius, height: size.radius, depth: size.radius},
+      cylinder: {width: size.radius, height: size.height, depth: size.radius}
+    }[type]
+  }
+
+
+ /* --------- Render geometry ------ */
+
+  renderGeometry(){
+    const { type, size } = this.props
+
+    return {
+      box: <boxGeometry
+        width={size.width}
+        height={size.height}
+        depth={size.depth}
+      />,
+      sphere: <sphereGeometry
+        radius={size.radius}
+        heightSegments={20}
+        widthSegments={20}
+      />,
+      cylinder: <cylinderGeometry
+        radiusTop={size.radius}
+        radiusBottom={size.radius}
+        height={size.height}
+        heightSegments={20}
+        radialSegments={20}
+      />
+    }[type]
+  }
+
+
   render() {
 
     const {
@@ -75,7 +113,7 @@ class Box extends Component {
           mouseInput={mouseInput}
           camera={camera}
           position={position}
-          size={size}
+          size={this.getGixmoSizes()}
           visible={selected}
           setPrimitivePosition={setPrimitivePosition}
         />
@@ -91,11 +129,9 @@ class Box extends Component {
 
         ref={this._ref}
       >
-        <boxGeometry
-          width={size.width}
-          height={size.height}
-          depth={size.depth}
-        />
+        {
+          this.renderGeometry()
+        }
         <meshLambertMaterial
           color={_color}
           wireframe={showWireframe}
@@ -106,4 +142,4 @@ class Box extends Component {
   }
 }
 
-export default Box
+export default Primitive

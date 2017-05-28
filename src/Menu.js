@@ -11,21 +11,6 @@ class Menu extends Component {
     resetCamera()
   }
 
-  createBox(){
-    const {addPrimitive} = this.props
-    addPrimitive('box')
-  }
-
-  createSphere(){
-    const {addPrimitive} = this.props
-    addPrimitive('sphere')
-  }
-
-  movePrimitive(distance, axis){
-    const {movePrimitive} = this.props
-    movePrimitive(distance, axis)
-  }
-
   toggleShowGrid() {
     const { toggleShowGrid } = this.props
     toggleShowGrid()
@@ -37,7 +22,7 @@ class Menu extends Component {
   }
 
   render() {
-    const { shouldShowGrid, showWireframe } = this.props
+    const { shouldShowGrid, showWireframe, addPrimitive } = this.props
 
     return (
       <div className='menu'>
@@ -61,15 +46,21 @@ class Menu extends Component {
         </div>
         <div
           className='button'
-          onClick={() => {this.createBox()}}
+          onClick={() => {addPrimitive('box')}}
           >
-          Add a box
+          box
         </div>
         <div
           className='button'
-          onClick={() => {this.createSphere()}}
+          onClick={() => {addPrimitive('sphere')}}
           >
-          Add a ball
+          ball
+        </div>
+        <div
+          className='button'
+          onClick={() => {addPrimitive('cylinder')}}
+          >
+          cylinder
         </div>
       </div>
     )

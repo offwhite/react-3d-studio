@@ -17,26 +17,12 @@ import Primitives from './Components/Primitives'
 
 class Viewport extends React.Component {
 
-  // notes:
-  // 1. [done] move lighting to a lighting component
-  // 2. [not doing] place camera control into a component
-  // 3. [done] allow camera reset
-  // 4. [dupe] add orientation grid
-  // 5. [done] move mesh into component
-  // 6. look at axis helper
-  // 7. [done] grid helper
-  // 8. [done] select primitive
-  // 9. [done] move primitive
-  // 10. [done] make new created primitive selected by default
-  // 11. gizmo - use arrowHelpers :)
-
-
   constructor(props, context) {
     super(props, context);
 
     this.state = {
       mouseInput: null,
-      width: window.innerWidth,
+      width: window.innerWidth - 300,
       height:window.innerHeight
     }
 
@@ -51,13 +37,14 @@ class Viewport extends React.Component {
   componentDidMount() {
     const {
       camera,
+      container
     } = this.refs;
 
     // this is for a test - remove it yeah?
     const { startApp } = this.props
     startApp()
 
-    const controls = new TrackballControls(camera);
+    const controls = new TrackballControls(camera, container)
 
     controls.rotateSpeed = 4.0;
     controls.zoomSpeed = 1.2;
@@ -72,21 +59,26 @@ class Viewport extends React.Component {
     this.controls = controls;
 
     //this.controls.addEventListener('change', this._onTrackballChange);
+    window.addEventListener("resize", this.updateScreenSize.bind(this))
+  }
+
+  componentWillUnmount() {
+      window.removeEventListener("resize", this.updateScreenSize);
+  }
+
+  updateScreenSize(){
+    const { mouseInput } = this.refs
+
+    this.setState({
+      width: window.innerWidth - 300,
+      height:window.innerHeight
+    })
   }
 
   componentDidUpdate(newProps) {
-    const {
-      mouseInput,
-    } = this.refs;
+    const { mouseInput } = this.refs
 
-    const {
-      width,
-      height,
-    } = this.props
-
-    if (width !== newProps.width || height !== newProps.height) {
-      mouseInput.containerResized();
-    }
+    mouseInput.containerResized()
   }
 
   componentWillUnmount() {
@@ -167,6 +159,7 @@ class Viewport extends React.Component {
 
     return (
       <div
+        className="viewportContainer"
         ref="container"
       >
         <React3

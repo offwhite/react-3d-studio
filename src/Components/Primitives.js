@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import * as THREE from 'three'
-import MouseInput from '../lib/MouseInput'
+import MouseInput from '../ref/MouseInput'
 
-import Primitive from './Primitives/Primitive'
+import Primitive from './Primitive'
 
 class Primitives extends Component {
 
