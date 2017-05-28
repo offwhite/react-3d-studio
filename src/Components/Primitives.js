@@ -1,10 +1,25 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import * as THREE from 'three'
+import MouseInput from '../lib/MouseInput'
 
 import Box from './Primitives/Box'
 import Sphere from './Primitives/Sphere'
 
 class Primitives extends Component {
+
+  static propTypes() {
+    return {
+      primitivesList:       PropTypes.object.isRequired,
+      mouseInput:           PropTypes.instanceOf(MouseInput),
+      camera:               PropTypes.instanceOf(THREE.PerspectiveCamera),
+
+      onPrimitivesMounted:  PropTypes.func.isRequired,
+      selectPrimitive:      PropTypes.func.isRequired,
+      selectedPrimitiveId:  PropTypes.integer.isRequired,
+      setPrimitivePosition: PropTypes.func.isRequired,
+    }
+  }
 
   constructor(props, context) {
     super(props, context);
@@ -23,7 +38,7 @@ class Primitives extends Component {
   }
 
   _onPrimitivesCreate = (index, primitives) => {
-    this.primitives[index] = primitives;
+    this.primitives[this.primitives.length] = primitives
   };
 
   vector(position) {
@@ -35,7 +50,13 @@ class Primitives extends Component {
   }
 
   renderBox(primitive, key, onCreate, selected) {
-    const { mouseInput, camera, selectPrimitive } = this.props
+    const {
+      mouseInput,
+      camera,
+      selectPrimitive,
+      setPrimitivePosition,
+      showWireframe
+    } = this.props
     return(
       <Box
         onCreate={onCreate}
@@ -45,6 +66,8 @@ class Primitives extends Component {
         camera={camera}
         selectPrimitive={selectPrimitive}
         selected={selected}
+        setPrimitivePosition={setPrimitivePosition}
+        showWireframe={showWireframe}
 
         position={this.vector(primitive.position)}
         rotation={this.euler(primitive.rotation)}

@@ -158,9 +158,11 @@ class Viewport extends React.Component {
       cameraState,
       lightState,
       shouldShowGrid,
+      showWireframe,
       primitivesList,
       selectPrimitive,
-      selectedPrimitiveId
+      selectedPrimitiveId,
+      setPrimitivePosition
     } = this.props
 
     return (
@@ -214,6 +216,8 @@ class Viewport extends React.Component {
             onPrimitivesMounted={this._onPrimitivesMounted}
             selectPrimitive={selectPrimitive}
             selectedPrimitiveId={selectedPrimitiveId}
+            setPrimitivePosition={setPrimitivePosition}
+            showWireframe={showWireframe}
           />
         </scene>
       </React3>
@@ -229,6 +233,7 @@ const mapStateToProps = state => {
     cameraState:         state.viewport.camera,
     lightState:          state.viewport.light,
     shouldShowGrid:      state.viewport.shouldShowGrid,
+    showWireframe:       state.viewport.showWireframe,
     primitivesList:      state.primitives.primitivesList,
     selectedPrimitiveId: state.primitives.selectedPrimitiveId
   }
@@ -237,10 +242,12 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) =>{
   return {
     startApp: () => dispatch(ViewportActions.startApp()),
-    resetCameraComplete: () => dispatch(ViewportActions.resetCameraComplete()),
-    setCamera: (cameraPosition, cameraRotation) =>
-      dispatch(ViewportActions.setCamera(cameraPosition, cameraRotation)),
-    selectPrimitive: (primitiveId) => dispatch(PrimitivesActions.selectPrimitive(primitiveId))
+    resetCameraComplete: () =>
+      dispatch(ViewportActions.resetCameraComplete()),
+    setPrimitivePosition: (position, axis) =>
+      dispatch(PrimitivesActions.setPrimitivePosition(position, axis)),
+    selectPrimitive: (primitiveId) =>
+      dispatch(PrimitivesActions.selectPrimitive(primitiveId))
   }
 }
 

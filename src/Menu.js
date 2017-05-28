@@ -27,16 +27,17 @@ class Menu extends Component {
   }
 
   toggleShowGrid() {
-    const { toggleShowGrid, shouldShowGrid } = this.props
+    const { toggleShowGrid } = this.props
     toggleShowGrid()
-    console.log('current grid value' , shouldShowGrid)
+  }
 
+  toggleWireframe() {
+    const { toggleWireframe } = this.props
+    toggleWireframe()
   }
 
   render() {
-    const { shouldShowGrid, cunty } = this.props
-
-   console.log(cunty)
+    const { shouldShowGrid, showWireframe } = this.props
 
     return (
       <div className='menu'>
@@ -45,6 +46,12 @@ class Menu extends Component {
           onClick={() => {this.toggleShowGrid()}}
           >
           Grid
+        </div>
+        <div
+          className={showWireframe ? 'button active' : 'button'}
+          onClick={() => {this.toggleWireframe()}}
+          >
+          Wireframe
         </div>
         <div
           className='button'
@@ -64,42 +71,6 @@ class Menu extends Component {
           >
           Add a ball
         </div>
-        <div
-          className='button'
-          onClick={() => {this.movePrimitive(-60, 'x')}}
-          >
-          X
-        </div>
-        <div
-          className='button'
-          onClick={() => {this.movePrimitive(60, 'x')}}
-          >
-          X
-        </div>
-        <div
-          className='button'
-          onClick={() => {this.movePrimitive(-60, 'y')}}
-          >
-          Y
-        </div>
-        <div
-          className='button'
-          onClick={() => {this.movePrimitive(60, 'y')}}
-          >
-          Y
-        </div>
-        <div
-          className='button'
-          onClick={() => {this.movePrimitive(-60, 'z')}}
-          >
-          Z
-        </div>
-        <div
-          className='button'
-          onClick={() => {this.movePrimitive(60, 'z')}}
-          >
-          Z
-        </div>
       </div>
     )
   }
@@ -107,7 +78,8 @@ class Menu extends Component {
 
 const mapStateToProps = state => {
   return {
-    shouldShowGrid: state.viewport.shouldShowGrid
+    shouldShowGrid: state.viewport.shouldShowGrid,
+    showWireframe: state.viewport.showWireframe
   }
 }
 
@@ -115,6 +87,7 @@ const mapDispatchToProps = (dispatch) =>{
   return {
     resetCamera: () => dispatch(ViewportActions.resetCamera()),
     toggleShowGrid: () => dispatch(ViewportActions.toggleShowGrid()),
+    toggleWireframe: () => dispatch(ViewportActions.toggleWireframe()),
     addPrimitive: (primitiveType) =>
       dispatch(PrimitivesActions.addPrimitive(primitiveType)),
     movePrimitive: (distance, axis) =>

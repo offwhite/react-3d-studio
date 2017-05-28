@@ -8,7 +8,8 @@ const {Types, Creators} = createActions({
   setCamera: ['cameraPosition', 'cameraRotation'],
   resetCamera: null,
   resetCameraComplete: null,
-  toggleShowGrid: null
+  toggleShowGrid: null,
+  toggleWireframe: null
 })
 
 export const ViewportTypes = Types
@@ -38,6 +39,7 @@ export const INITIAL_STATE = Immutable({
   camera: defaultCamera,
   light: defaultLight,
   shouldShowGrid: true,
+  showWireframe: true,
   resetCamera: false
 })
 
@@ -60,6 +62,10 @@ const toggleShowGrid = (state) => {
   return state.merge({shouldShowGrid: !state.shouldShowGrid})
 }
 
+const toggleWireframe = (state) => {
+  return state.merge({showWireframe: !state.showWireframe})
+}
+
 const setCamera = (state, {cameraPosition, cameraRotation}) => {
   return state.merge({
     camera: {
@@ -75,5 +81,6 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.SET_CAMERA]: setCamera,
   [Types.RESET_CAMERA]: resetCamera,
   [Types.RESET_CAMERA_COMPLETE]: resetCameraComplete,
-  [Types.TOGGLE_SHOW_GRID]: toggleShowGrid
+  [Types.TOGGLE_SHOW_GRID]: toggleShowGrid,
+  [Types.TOGGLE_WIREFRAME]: toggleWireframe
 })

@@ -9,42 +9,41 @@ class Box extends Component {
 
   static propTypes() {
     return {
-      onCreate:   PropTypes.func.isRequired,
-      id:         PropTypes.integer.isRequired,
-      mouseInput: PropTypes.instanceOf(MouseInput),
-      camera:     PropTypes.instanceOf(THREE.PerspectiveCamera),
+      onCreate:             PropTypes.func.isRequired,
+      id:                   PropTypes.integer.isRequired,
+      mouseInput:           PropTypes.instanceOf(MouseInput),
+      camera:               PropTypes.instanceOf(THREE.PerspectiveCamera),
+      setPrimitivePosition: PropTypes.func.isRequired,
 
-      position:   PropTypes.object.isRequired,
-      rotation:   PropTypes.object.isRequired,
-      size:       PropTypes.object.isRequired,
-      color:      PropTypes.string.isRequired,
-      selected:   PropTypes.bool,
-      name:       PropTypes.string,
+      position:             PropTypes.object.isRequired,
+      rotation:             PropTypes.object.isRequired,
+      size:                 PropTypes.object.isRequired,
+      color:                PropTypes.string.isRequired,
+      selected:             PropTypes.bool,
+      name:                 PropTypes.string,
     }
   }
 
 
   _onMouseEnter = (event, intersection) => {
-    console.log('mouse enter mesh')
     event.preventDefault();
     event.stopPropagation();
   }
 
   _onMouseDown = (event, intersection) => {
-    const {id, selectPrimitive} = this.props
-    selectPrimitive(id)
-    event.preventDefault();
-    event.stopPropagation();
+    const {id, selectPrimitive, showWireframe} = this.props
+    event.preventDefault()
+    event.stopPropagation()
+    if (!showWireframe)
+      selectPrimitive(id)
   }
   _onMouseLeave = (event, intersection) => {
-    console.log('mouse leave mesh')
     event.preventDefault();
     event.stopPropagation();
   }
 
   _ref = (mesh) => {
     const {onCreate} = this.props;
-
     onCreate(mesh);
   };
 
@@ -57,7 +56,12 @@ class Box extends Component {
       rotation,
       size,
       color,
-      selected
+      selected,
+      onCreate,
+      mouseInput,
+      camera,
+      setPrimitivePosition,
+      showWireframe
     } = this.props
 
     // TODO: move delected color to config
@@ -66,13 +70,15 @@ class Box extends Component {
 
     return (
       <group>
-        {
-          selected && <MoveGizmo
-            position={position}
-            rotation={rotation}
-            size={size}
-          />
-        }
+        <MoveGizmo
+          onCreate={onCreate}
+          mouseInput={mouseInput}
+          camera={camera}
+          position={position}
+          size={size}
+          visible={selected}
+          setPrimitivePosition={setPrimitivePosition}
+        />
       <mesh
         castShadow
         receiveShadow
@@ -92,6 +98,7 @@ class Box extends Component {
         />
         <meshLambertMaterial
           color={_color}
+          wireframe={showWireframe}
         />
       </mesh>
     </group>

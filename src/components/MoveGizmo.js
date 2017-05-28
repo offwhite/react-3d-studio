@@ -3,12 +3,22 @@ import PropTypes from 'prop-types'
 import * as THREE from 'three'
 import MouseInput from '../lib/MouseInput';
 
+// shared plane for dragging purposes
+// it's good to share because you can drag only one cube at a time
+const dragPlane = new THREE.Plane()
+const backVector = new THREE.Vector3(0, 0, -1)
+
 class MoveGizmo extends Component {
 
   static propTypes() {
     return {
-      position:   PropTypes.object.isRequired,
-      rotation:   PropTypes.object.isRequired,
+      onCreate:             PropTypes.func.isRequired,
+      mouseInput:           PropTypes.instanceOf(MouseInput),
+      camera:               PropTypes.instanceOf(THREE.PerspectiveCamera),
+
+      position:             PropTypes.object.isRequired,
+      visible:              PropTypes.boolean.isRequired,
+      setPrimitivePosition: PropTypes.func.isRequired
     }
   }
 
@@ -19,13 +29,88 @@ class MoveGizmo extends Component {
     this.shaftRadius = 1
     this.headHeight = 60
     this.headRadius = 10
+    this.moveAxis = 'x'
   }
 
-  _ref = (mesh) => {
-    //const {onCreate} = this.props;
+  componentWillUnmount() {
+    document.removeEventListener('mouseup', this._onDocumentMouseUp);
+  }
 
-    //onCreate(mesh);
+  // ------- LIFES A DRAG ------------
+
+  _onMouseDown = (event, intersection, axis) => {
+    const { visible, camera, position } = this.props
+
+    event.preventDefault()
+    event.stopPropagation()
+
+    if (!visible)
+      return false
+
+    // orientate the drag plane
+    this.moveAxis = axis
+
+    const planeEuler = {
+      x: this.euler({x: 0, y: 0, z: 1.57}),
+      y: this.euler({x: 0, y: 0, z: 1.57}),
+      z: this.euler({x: 1.57, y: 0, z: 0})
+    }[axis]
+
+    dragPlane.setFromNormalAndCoplanarPoint(
+      backVector.clone().applyEuler(planeEuler),
+      intersection.point
+    )
+
+    this._offset = intersection.point.clone().sub(this.vector(position));
+
+    document.addEventListener('mouseup', this._onDocumentMouseUp)
+    document.addEventListener('mousemove', this._onDocumentMouseMove)
+  }
+
+  _onDocumentMouseMove = (event) => {
+    event.preventDefault();
+
+    const {
+      mouseInput,
+      setPrimitivePosition
+    } = this.props;
+
+    const ray:THREE.Ray = mouseInput.getCameraRay(new THREE
+      .Vector2(event.clientX, event.clientY));
+
+    // does the ray intersect with the drag plane?
+    const intersection = dragPlane.intersectLine(new THREE.Line3(
+      ray.origin,
+      ray.origin.clone()
+        .add(ray.direction.clone().multiplyScalar(10000))
+    ))
+
+    if (intersection) {
+      setPrimitivePosition(intersection.sub(this._offset), this.moveAxis)
+    }
+  }
+
+  _onDocumentMouseUp = (event) => {
+    event.preventDefault();
+
+    document.removeEventListener('mouseup', this._onDocumentMouseUp)
+    document.removeEventListener('mousemove', this._onDocumentMouseMove)
+  }
+
+  // --------------
+
+
+
+
+
+
+
+  _ref = (mesh) => {
+    const {onCreate} = this.props
+    onCreate(mesh)
   };
+
+  // ------------ Helpers -------
 
   vector(position) {
     return new THREE.Vector3(position.x, position.y, position.z)
@@ -37,7 +122,7 @@ class MoveGizmo extends Component {
 
   renderArrow(position, axis, color) {
 
-    const {size} = this.props
+    const {size, visible} = this.props
 
     const shaftLength = {
       x: ((size.width/2) + this.overlap),
@@ -46,20 +131,25 @@ class MoveGizmo extends Component {
     }[axis]
 
     const rotation = {
-      x: this.euler({x: 0, y: 0, z: 1.6}),
+      x: this.euler({x: 0, y: 0, z: 1.57}),
       y: this.euler({x: 0, y: 0, z: 0}),
-      z: this.euler({x: 1.6, y: 0, z: 0}),
+      z: this.euler({x: 1.57, y: 0, z: 0}),
     }[axis]
 
     return (
       <group
         rotation={rotation}
+        visible={visible}
       >
         <mesh
           name={'head'}
           castShadow={false}
           receiveShadow={false}
           position={this.vector({x: 0, y: shaftLength, z: 0})}
+
+          onMouseEnter={this._onMouseEnter}
+          onMouseDown={(event, intersection) => {this._onMouseDown(event, intersection, axis)}}
+          onMouseLeave={this._onMouseLeave}
           ref={this._ref}
         >
         <cylinderGeometry
