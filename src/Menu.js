@@ -103,8 +103,6 @@ const mapDispatchToProps = (dispatch) =>{
     switchToSizeManipulators: () => dispatch(ViewportActions.switchToSizeManipulators()),
     addPrimitive: (primitiveType) =>
       dispatch(PrimitivesActions.addPrimitive(primitiveType)),
-    movePrimitive: (distance, axis) =>
-      dispatch(PrimitivesActions.movePrimitive(distance, axis))
   }
 }
 

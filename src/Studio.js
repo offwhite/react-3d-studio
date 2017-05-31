@@ -4,6 +4,7 @@ import createStore from './redux/index'
 
 import Viewport from './Viewport'
 import Menu from './Menu'
+import KeyboardShortcuts from './KeyboardShortcuts'
 import ModificationPanel from './ModificationPanel/ModificationPanel'
 
 // modification panel
@@ -15,9 +16,7 @@ import ModificationPanel from './ModificationPanel/ModificationPanel'
 // rotation gizmo - that's gonna be tough
 // maybe wrap all primitives in a group, set the position on the group, then offset an
 // inner group by half the height. that'd put the origin point at one end.
-// set radius on x as well
 
-// put size into its own reducer
 
 class Studio extends Component {
   render() {
@@ -29,6 +28,7 @@ class Studio extends Component {
           <Viewport />
           <Menu />
           <ModificationPanel />
+          <KeyboardShortcuts />
         </div>
       </Provider>
     )
