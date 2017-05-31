@@ -17,6 +17,8 @@ class Primitives extends Component {
       selectPrimitive:      PropTypes.func.isRequired,
       selectedPrimitiveId:  PropTypes.integer.isRequired,
       setPrimitivePosition: PropTypes.func.isRequired,
+      setPrimitiveSize:     PropTypes.func.isRequired,
+      manipulationType:     PropTypes.string.isRequired
     }
   }
 
@@ -38,7 +40,13 @@ class Primitives extends Component {
 
   _onPrimitivesCreate = (index, primitives) => {
     this.primitives[this.primitives.length] = primitives
-  };
+  }
+
+  _onPrimitivesDestroy = () => {
+    // look at updating the primitives list here. i think that's
+    // why MI is fucked on new objects created after a deletion.
+    console.log('destroy', this.primitives)
+  }
 
   vector(position) {
     return new THREE.Vector3(position.x, position.y, position.z)
@@ -54,12 +62,15 @@ class Primitives extends Component {
       camera,
       selectPrimitive,
       setPrimitivePosition,
-      showWireframe
+      setPrimitiveSize,
+      showWireframe,
+      manipulationType
     } = this.props
 
     return(
       <Primitive
         onCreate={onCreate}
+        onDestroy={this._onPrimitivesDestroy}
         id={key}
         key={key}
         mouseInput={mouseInput}
@@ -67,7 +78,9 @@ class Primitives extends Component {
         selectPrimitive={selectPrimitive}
         selected={selected}
         setPrimitivePosition={setPrimitivePosition}
+        setPrimitiveSize={setPrimitiveSize}
         showWireframe={showWireframe}
+        manipulationType={manipulationType}
         type={primitive.type}
 
         position={this.vector(primitive.position)}

@@ -26,8 +26,10 @@ class Viewport extends React.Component {
       height:window.innerHeight
     }
 
-    // construct the position vector here, because if we use 'new' within render,
-    // React will think that things have changed when they have not.
+    // increate the manual throttle to throttle the app
+    // higher number = more jitter, less PCU cycles.
+    this.manualThrottle = 0
+    this.manualThrottlePointer = 0
   }
 
   shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate;
@@ -58,8 +60,9 @@ class Viewport extends React.Component {
 
     this.controls = controls;
 
-    //this.controls.addEventListener('change', this._onTrackballChange);
+    //this.controls.addEventListener('change', this._onTrackballChange)
     window.addEventListener("resize", this.updateScreenSize.bind(this))
+    this._onAnimateInternal()
   }
 
   componentWillUnmount() {
@@ -93,9 +96,13 @@ class Viewport extends React.Component {
 
   // ==== FRAME ====
 
+  // we will get this callback every frame
   _onAnimate = () => {
-    // we will get this callback every frame
-    this._onAnimateInternal()
+    this.manualThrottlePointer++
+    if(this.manualThrottlePointer > this.manualThrottle) {
+      this._onAnimateInternal()
+      this.manualThrottlePointer = 0
+    }
   };
 
   _onAnimateInternal() {
@@ -154,7 +161,9 @@ class Viewport extends React.Component {
       primitivesList,
       selectPrimitive,
       selectedPrimitiveId,
-      setPrimitivePosition
+      setPrimitivePosition,
+      setPrimitiveSize,
+      manipulationType
     } = this.props
 
     return (
@@ -210,7 +219,9 @@ class Viewport extends React.Component {
             selectPrimitive={selectPrimitive}
             selectedPrimitiveId={selectedPrimitiveId}
             setPrimitivePosition={setPrimitivePosition}
+            setPrimitiveSize={setPrimitiveSize}
             showWireframe={showWireframe}
+            manipulationType={manipulationType}
           />
         </scene>
       </React3>
@@ -228,7 +239,8 @@ const mapStateToProps = state => {
     shouldShowGrid:      state.viewport.shouldShowGrid,
     showWireframe:       state.viewport.showWireframe,
     primitivesList:      state.primitives.primitivesList,
-    selectedPrimitiveId: state.primitives.selectedPrimitiveId
+    selectedPrimitiveId: state.primitives.selectedPrimitiveId,
+    manipulationType:    state.viewport.manipulationType
   }
 }
 
@@ -239,6 +251,8 @@ const mapDispatchToProps = (dispatch) =>{
       dispatch(ViewportActions.resetCameraComplete()),
     setPrimitivePosition: (position, axis) =>
       dispatch(PrimitivesActions.setPrimitivePosition(position, axis)),
+    setPrimitiveSize: (cursorPosition, axis) =>
+      dispatch(PrimitivesActions.setPrimitiveSize(cursorPosition, axis)),
     selectPrimitive: (primitiveId) =>
       dispatch(PrimitivesActions.selectPrimitive(primitiveId))
   }

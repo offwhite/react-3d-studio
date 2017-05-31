@@ -7,7 +7,9 @@ const {Types, Creators} = createActions({
   movePrimitive: ['distance', 'axis'],
   highlightPrimitive: ['primitiveId'],
   setPrimitivePosition: ['position', 'axis'],
-  updatePrimitiveAttribute: ['scope', 'attributeName', 'value']
+  setPrimitiveSize: ['cursorPosition', 'axis'],
+  updatePrimitiveAttribute: ['scope', 'attributeName', 'value'],
+  deletePrimitive: ['primitiveId']
 })
 
 export const StudioTypes = Types
@@ -18,7 +20,7 @@ export default Creators
 const defaults = {
   box: {
     type: 'box',
-    name: 'no name',
+    name: 'Un-named box',
     size: {
       width: 100,
       height: 100,
@@ -26,28 +28,28 @@ const defaults = {
     },
     position: {x:0, y:50, z:0},
     rotation: {x:0, y:0, z:0},
-    color: '#cccccc'
+    color: '#2f404c'
   },
   sphere: {
     type: 'sphere',
-    name: 'no name',
+    name: 'Un-named sphere',
     size: {
       radius: 50
     },
     position: {x:0, y:0, z:0},
     rotation: {x:0, y:0, z:0},
-    color: '#cccccc'
+    color: '#2f404c'
   },
   cylinder: {
     type: 'cylinder',
-    name: 'no name',
+    name: 'Un-named cylinder',
     size: {
       height: 100,
       radius: 50
     },
     position: {x:0, y:0, z:0},
     rotation: {x:0, y:0, z:0},
-    color: '#cccccc'
+    color: '#2f404c'
   }
 }
 
@@ -55,12 +57,31 @@ export const INITIAL_STATE = Immutable({
   primitivesList: []
 })
 
-/* ---------- Helper --------------- */
+/* ---------- Helpers --------------- */
 
 const radians = (degrees) => {
   return (degrees * (Math.PI/180))
 }
 
+// gives you the total distance in 3d space
+const distanceVector = ( v1, v2 ) => {
+    var dx = v1.x - v2.x;
+    var dy = v1.y - v2.y;
+    var dz = v1.z - v2.z;
+    return Math.sqrt( dx * dx + dy * dy + dz * dz );
+}
+
+// gives you an object of each diff
+const vectorDeltas = ( v1, v2 ) => {
+    return {
+      x: (v1.x - v2.x),
+      y: (v1.y - v2.y),
+      z: (v1.z - v2.z)
+    }
+}
+
+
+/* -------- OTHER ------- MISC? ----------- */
 
 const addPrimitiveToArray = (primitives, primitive) => {
   if (primitives.length < 1){
@@ -91,9 +112,10 @@ const setExplicitPrimitivePosition = (primitive, newPosition, axis) => {
 
 const setExplicitPrimitiveSize = (primitive, newSize, axis) => {
   primitive.size = {
-    width: axis === 'width' ? newSize : primitive.size.width,
-    height: axis === 'height' ? newSize : primitive.size.height,
-    depth: axis === 'depth' ? newSize : primitive.size.depth,
+    width: axis === 'x' ? newSize.x : primitive.size.width,
+    height: axis === 'y' ? newSize.y : primitive.size.height,
+    depth: axis === 'z' ? newSize.z : primitive.size.depth,
+    radius: axis === 'radius' ? newSize.radius : primitive.size.radius,
   }
   return Immutable(primitive)
 }
@@ -115,7 +137,10 @@ const setExplicitPrimitiveAttribute = (primitive, scope, attributeName, value) =
     primitive = setExplicitPrimitivePosition(primitive, {x: value, y: value, z: value}, attributeName)
   }
   else if (scope === 'size') {
-    primitive = setExplicitPrimitiveSize(primitive, value, attributeName)
+    primitive = setExplicitPrimitiveSize(primitive, {x: value, y: value, z: value}, attributeName)
+  }
+  else if (scope === 'radius') {
+    primitive = setExplicitPrimitiveSize(primitive, {radius: value}, attributeName)
   }
   else if (scope === 'rotation') {
     primitive = setExplicitPrimitiveRotation(primitive, value, attributeName)
@@ -126,7 +151,6 @@ const setExplicitPrimitiveAttribute = (primitive, scope, attributeName, value) =
 
 
 /* --------- primitive list modifiers -------- */
-
 
 const selectedPrimitive = (state) => {
   // make primitiveList mutable
@@ -148,8 +172,6 @@ const replacePrimitiveInList = (state, newPrimitive) => {
 
 
 
-
-
 /* ------------- Reducers ------------- */
 
 const addPrimitive = (state, {primitiveType}) => {
@@ -159,6 +181,24 @@ const addPrimitive = (state, {primitiveType}) => {
   return state.merge({
     primitivesList: newObjectList,
     selectedPrimitiveId: (newObjectList.length - 1)
+  })
+}
+
+const deletePrimitive = (state, {primitiveId}) => {
+  const mutablePrimitives = Immutable.asMutable(state.primitivesList)
+
+  if (primitiveId < 0)
+    return state
+
+  // remove from array
+  mutablePrimitives.splice(primitiveId, 1)
+
+  // update selected primitive
+  const newSelection = (primitiveId !== state.selectedPrimitiveId) ? state.selectedPrimitiveId : null
+
+  return state.merge({
+    primitivesList: Immutable(mutablePrimitives),
+    selectedPrimitiveId: newSelection
   })
 }
 
@@ -196,6 +236,15 @@ const setPrimitivePosition = (state, {position, axis}) => {
   })
 }
 
+const setPrimitiveSize = (state, {cursorPosition, axis}) => {
+  // get the difference in axis
+  const newSize = vectorDeltas(cursorPosition, selectedPrimitive(state).position)
+  const newPrimitive = setExplicitPrimitiveSize(selectedPrimitive(state), newSize, axis)
+  return state.merge({
+    primitivesList: replacePrimitiveInList(state, newPrimitive)
+  })
+}
+
 
 const updatePrimitiveAttribute = (state, {scope, attributeName, value}) => {
   const newPrimitive = setExplicitPrimitiveAttribute(selectedPrimitive(state), scope, attributeName, value)
@@ -210,5 +259,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.SELECT_PRIMITIVE]: selectPrimitive,
   [Types.MOVE_PRIMITIVE]: movePrimitive,
   [Types.SET_PRIMITIVE_POSITION]: setPrimitivePosition,
-  [Types.UPDATE_PRIMITIVE_ATTRIBUTE]: updatePrimitiveAttribute
+  [Types.SET_PRIMITIVE_SIZE]: setPrimitiveSize,
+  [Types.UPDATE_PRIMITIVE_ATTRIBUTE]: updatePrimitiveAttribute,
+  [Types.DELETE_PRIMITIVE]: deletePrimitive
 })

@@ -24,17 +24,30 @@
   padding: 8px;
   border-bottom: solid 1px #333333;
   cursor: pointer;
+  position: relative;
 }
 .primitivesList .selected{
   background-color: #2f404c;
   color: #cccccc;
 }
 
+.primitivesList .deletePrimitive{
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  border-radius: 100%;
+  overflow: hidden;
+  width: 25px;
+  height: 25px;
+  background-color: red;
+  box-shadow: 0 0 10px 0 black;
+}
+
 .primitiveEditForm{
   margin: 10px 0;
   height: calc(100% - 370px);
   border: solid 1px #666666;
-  background-color: #cccccc;
+  background-color: #cdcdcd;
 }
 input {
   width: 100%;
@@ -47,9 +60,14 @@ input {
 .inputRow{
   float: left;
   width: 100%;
-  border-bottom: solid 1px #333333;
+  border-bottom: solid 1px #999999;
   padding: 10px;
   box-sizing: border-box;
+}
+.inputRow h3{
+  font-weight: normal;
+  font-size: 12px;
+  margin: 0 0 5px;
 }
 .spinnerRow input{
   float: left;

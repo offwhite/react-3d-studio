@@ -8,7 +8,7 @@ import MouseInput from '../ref/MouseInput';
 const dragPlane = new THREE.Plane()
 const backVector = new THREE.Vector3(0, 0, -1)
 
-class MoveGizmo extends Component {
+class SizeGizmo extends Component {
 
   static propTypes() {
     return {
@@ -18,7 +18,8 @@ class MoveGizmo extends Component {
 
       position:             PropTypes.object.isRequired,
       visible:              PropTypes.boolean.isRequired,
-      setPrimitivePosition: PropTypes.func.isRequired
+      setPrimitiveSize:     PropTypes.func.isRequired,
+      primitiveSize:        PropTypes.object.isRequired
     }
   }
 
@@ -27,9 +28,8 @@ class MoveGizmo extends Component {
 
     this.overlap = 100
     this.shaftRadius = 1
-    this.headHeight = 60
-    this.headRadius = 20
-    this.moveAxis = 'x'
+    this.headDimensions = 40
+    this.scaleAxis = 'x'
   }
 
   componentWillUnmount() {
@@ -39,7 +39,7 @@ class MoveGizmo extends Component {
   // ------- LIFES A DRAG ------------
 
   _onMouseDown = (event, intersection, axis) => {
-    const { visible, camera, position } = this.props
+    const { visible, camera, position, primitiveSize } = this.props
 
     event.preventDefault()
     event.stopPropagation()
@@ -63,6 +63,8 @@ class MoveGizmo extends Component {
 
     this._offset = intersection.point.clone().sub(this.vector(position));
 
+    this.startingSize = primitiveSize
+
     document.addEventListener('mouseup', this._onDocumentMouseUp)
     document.addEventListener('mousemove', this._onDocumentMouseMove)
   }
@@ -72,7 +74,7 @@ class MoveGizmo extends Component {
 
     const {
       mouseInput,
-      setPrimitivePosition
+      setPrimitiveSize
     } = this.props;
 
     const ray:THREE.Ray = mouseInput.getCameraRay(new THREE
@@ -86,7 +88,17 @@ class MoveGizmo extends Component {
     ))
 
     if (intersection) {
-      setPrimitivePosition(intersection.sub(this._offset), this.moveAxis)
+      const newVector = intersection.sub(this._offset)
+
+      const newWSize = (typeof(this.startingSize.radius) !== 'undefined') ? {
+          y: this.startingSize.height + newVector.y,
+          radius: this.startingSize.radius + newVector.x,
+        } : {
+          x: this.startingSize.width + newVector.x,
+          y: this.startingSize.height + newVector.y,
+          z: this.startingSize.depth + newVector.z
+        }
+      setPrimitiveSize(newWSize, this.moveAxis)
     }
   }
 
@@ -140,6 +152,7 @@ class MoveGizmo extends Component {
       <group
         rotation={rotation}
         visible={visible}
+        visible={visible}
       >
         <mesh
           name={'head'}
@@ -151,13 +164,12 @@ class MoveGizmo extends Component {
           onMouseEnter={this._onMouseEnter}
           onMouseDown={(event, intersection) => {this._onMouseDown(event, intersection, axis)}}
           onMouseLeave={this._onMouseLeave}
-
           ref={this._ref}
         >
-        <cylinderGeometry
-          radiusTop={0}
-          radiusBottom={this.headRadius}
-          height={this.headHeight}
+        <boxGeometry
+          width={this.headDimensions}
+          depth={this.headDimensions}
+          height={this.headDimensions}
         />
         <meshLambertMaterial
           color={color}
@@ -186,17 +198,19 @@ class MoveGizmo extends Component {
 
   render() {
 
-    const {position} = this.props
+    const {position, rotation} = this.props
 
     return (
-      <group position={position}>
+      <group
+        position={position}
+        rotation={rotation}
+      >
         { this.renderArrow(position, 'x', '#ff0000') }
         { this.renderArrow(position, 'y', '#00ff00') }
         { this.renderArrow(position, 'z', '#0000ff') }
-
       </group>
     )
   }
 }
 
-export default MoveGizmo
+export default SizeGizmo

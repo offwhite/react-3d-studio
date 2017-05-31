@@ -33,13 +33,23 @@ class PrimitiveEditForm extends Component {
     return (
       <div className='primitiveEditForm'>
         <div className='inputRow'>
-        <input
-          type='text'
-          value={primitive.name}
-          onChange={(event) => {this.updateAttribute('root','name', event.target.value)}}
-        />
-      </div>
+          <h3>Name</h3>
+          <input
+            type='text'
+            value={primitive.name}
+            onChange={(event) => {this.updateAttribute('root','name', event.target.value)}}
+          />
+        </div>
+        <div className='inputRow'>
+          <h3>Color</h3>
+          <input
+            type='text'
+            value={primitive.color}
+            onChange={(event) => {this.updateAttribute('root','color', event.target.value)}}
+          />
+        </div>
       <div className='inputRow spinnerRow'>
+        <h3>Position</h3>
         <input
           type='number'
           value={primitive.position.x}
@@ -56,26 +66,61 @@ class PrimitiveEditForm extends Component {
           onChange={(event) => {this.updateAttribute('position','z', event.target.value)}}
         />
       </div>
-
+      {
+        primitive.type === 'box' &&
+        <div className='inputRow spinnerRow'>
+          <h3>Size</h3>
+          <input
+            type='number'
+            value={primitive.size.width}
+            onChange={(event) => {this.updateAttribute('size','x', event.target.value)}}
+          />
+          <input
+            type='number'
+            value={primitive.size.height}
+            onChange={(event) => {this.updateAttribute('size','y', event.target.value)}}
+          />
+          <input
+            type='number'
+            value={primitive.size.depth}
+            onChange={(event) => {this.updateAttribute('size','z', event.target.value)}}
+          />
+        </div>
+      }
+      {
+        primitive.type === 'sphere' &&
+        <div className='inputRow'>
+          <h3>Radius</h3>
+          <input
+            type='number'
+            value={primitive.size.radius}
+            onChange={(event) => {this.updateAttribute('radius','radius', event.target.value)}}
+          />
+        </div>
+      }
+      {
+        primitive.type === 'cylinder' &&
+        <div>
+          <div className='inputRow'>
+            <h3>height</h3>
+            <input
+              type='number'
+              value={primitive.size.height}
+              onChange={(event) => {this.updateAttribute('size','y', event.target.value)}}
+            />
+          </div>
+          <div className='inputRow'>
+            <h3>Radius</h3>
+            <input
+              type='number'
+              value={primitive.size.radius}
+              onChange={(event) => {this.updateAttribute('radius','radius', event.target.value)}}
+            />
+          </div>
+        </div>
+      }
       <div className='inputRow spinnerRow'>
-        <input
-          type='number'
-          value={primitive.size.width}
-          onChange={(event) => {this.updateAttribute('size','width', event.target.value)}}
-        />
-        <input
-          type='number'
-          value={primitive.size.height}
-          onChange={(event) => {this.updateAttribute('size','height', event.target.value)}}
-        />
-        <input
-          type='number'
-          value={primitive.size.depth}
-          onChange={(event) => {this.updateAttribute('size','depth', event.target.value)}}
-        />
-      </div>
-
-      <div className='inputRow spinnerRow'>
+        <h3>Rotation</h3>
         <input
           type='number'
           value={this.degrees(primitive.rotation.x)}

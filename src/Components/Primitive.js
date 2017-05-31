@@ -4,16 +4,20 @@ import * as THREE from 'three'
 import MouseInput from '../ref/MouseInput'
 
 import MoveGizmo from './MoveGizmo'
+import SizeGizmo from './SizeGizmo'
 
 class Primitive extends Component {
 
   static propTypes() {
     return {
       onCreate:             PropTypes.func.isRequired,
+      onDestroy:            PropTypes.func.isRequired,
       id:                   PropTypes.integer.isRequired,
       mouseInput:           PropTypes.instanceOf(MouseInput),
       camera:               PropTypes.instanceOf(THREE.PerspectiveCamera),
       setPrimitivePosition: PropTypes.func.isRequired,
+      setPrimitiveSize:     PropTypes.func.isRequired,
+      manipulationType:     PropTypes.string.isRequired,
 
       position:             PropTypes.object.isRequired,
       rotation:             PropTypes.object.isRequired,
@@ -23,6 +27,20 @@ class Primitive extends Component {
       name:                 PropTypes.string,
       type:                 PropTypes.string.isRequired
     }
+  }
+
+  componentWillUnmount = () => {
+    const { onDestroy, mouseInput } = this.props
+    mouseInput.flagClearIntersetions()
+    onDestroy()
+  }
+
+  selectedColor = () => {
+    const { color } = this.props
+    const tint = '#0000ff'
+    const percentage = 0.5
+    var f=parseInt(color.slice(1),16),t=parseInt(tint.slice(1),16),R1=f>>16,G1=f>>8&0x00FF,B1=f&0x0000FF,R2=t>>16,G2=t>>8&0x00FF,B2=t&0x0000FF;
+    return "#"+(0x1000000+(Math.round((R2-R1)*percentage)+R1)*0x10000+(Math.round((G2-G1)*percentage)+G1)*0x100+(Math.round((B2-B1)*percentage)+B1)).toString(16).slice(1);
   }
 
 
@@ -99,22 +117,33 @@ class Primitive extends Component {
       mouseInput,
       camera,
       setPrimitivePosition,
-      showWireframe
+      setPrimitiveSize,
+      showWireframe,
+      manipulationType
     } = this.props
 
-    // TODO: move delected color to config
-
-    const _color = selected ? '#a1bcde' : color
+    const _color = selected ? this.selectedColor() : color
 
     return (
       <group>
-        <MoveGizmo
+        <SizeGizmo
+          onCreate={onCreate}
+          mouseInput={mouseInput}
+          camera={camera}
+          position={position}
+          rotation={rotation}
+          primitiveSize={size}
+          size={this.getGixmoSizes()}
+          visible={ selected && manipulationType == 'size' }
+          setPrimitiveSize={setPrimitiveSize}
+        />
+      <MoveGizmo
           onCreate={onCreate}
           mouseInput={mouseInput}
           camera={camera}
           position={position}
           size={this.getGixmoSizes()}
-          visible={selected}
+          visible={ selected && manipulationType == 'move' }
           setPrimitivePosition={setPrimitivePosition}
         />
       <mesh

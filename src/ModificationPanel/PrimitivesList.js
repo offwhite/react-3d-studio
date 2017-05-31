@@ -7,7 +7,7 @@ import './ModificationPanel.css'
 class PrimitivesList extends Component {
 
   renderPrimitive(primitive, key) {
-    const {selectPrimitive, selectedPrimitiveId} = this.props
+    const {selectPrimitive, deletePrimitive, selectedPrimitiveId} = this.props
 
     const selected = selectedPrimitiveId === key
 
@@ -17,7 +17,11 @@ class PrimitivesList extends Component {
         onClick={() => {selectPrimitive(key)}}
         key={key}
       >
-        { `${primitive.name} (${primitive.type})` }
+        {primitive.name}
+        <div
+          className='deletePrimitive'
+          onClick={() => {deletePrimitive(key)}}
+        ></div>
       </div>
     )
   }
@@ -47,7 +51,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) =>{
   return {
     selectPrimitive: (primitiveId) =>
-      dispatch(PrimitivesActions.selectPrimitive(primitiveId))
+      dispatch(PrimitivesActions.selectPrimitive(primitiveId)),
+    deletePrimitive: (primitiveId) =>
+      dispatch(PrimitivesActions.deletePrimitive(primitiveId))
   }
 }
 

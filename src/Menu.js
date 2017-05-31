@@ -22,7 +22,14 @@ class Menu extends Component {
   }
 
   render() {
-    const { shouldShowGrid, showWireframe, addPrimitive } = this.props
+    const {
+      shouldShowGrid,
+      showWireframe,
+      addPrimitive,
+      switchToMoveManipulators,
+      switchToSizeManipulators,
+      manipulationType
+    } = this.props
 
     return (
       <div className='menu'>
@@ -31,6 +38,18 @@ class Menu extends Component {
           onClick={() => {this.toggleShowGrid()}}
           >
           Grid
+        </div>
+        <div
+          className={manipulationType === 'move' ? 'button active' : 'button'}
+          onClick={() => {switchToMoveManipulators()}}
+          >
+          move
+        </div>
+        <div
+          className={manipulationType === 'size' ? 'button active' : 'button'}
+          onClick={() => {switchToSizeManipulators()}}
+          >
+          size
         </div>
         <div
           className={showWireframe ? 'button active' : 'button'}
@@ -42,7 +61,7 @@ class Menu extends Component {
           className='button'
           onClick={() => {this.resetCamera()}}
           >
-          Reset Camera
+          reset cam
         </div>
         <div
           className='button'
@@ -70,7 +89,8 @@ class Menu extends Component {
 const mapStateToProps = state => {
   return {
     shouldShowGrid: state.viewport.shouldShowGrid,
-    showWireframe: state.viewport.showWireframe
+    showWireframe: state.viewport.showWireframe,
+    manipulationType: state.viewport.manipulationType
   }
 }
 
@@ -79,6 +99,8 @@ const mapDispatchToProps = (dispatch) =>{
     resetCamera: () => dispatch(ViewportActions.resetCamera()),
     toggleShowGrid: () => dispatch(ViewportActions.toggleShowGrid()),
     toggleWireframe: () => dispatch(ViewportActions.toggleWireframe()),
+    switchToMoveManipulators: () => dispatch(ViewportActions.switchToMoveManipulators()),
+    switchToSizeManipulators: () => dispatch(ViewportActions.switchToSizeManipulators()),
     addPrimitive: (primitiveType) =>
       dispatch(PrimitivesActions.addPrimitive(primitiveType)),
     movePrimitive: (distance, axis) =>

@@ -9,7 +9,9 @@ const {Types, Creators} = createActions({
   resetCamera: null,
   resetCameraComplete: null,
   toggleShowGrid: null,
-  toggleWireframe: null
+  toggleWireframe: null,
+  switchToMoveManipulators: null,
+  switchToSizeManipulators: null
 })
 
 export const ViewportTypes = Types
@@ -40,7 +42,8 @@ export const INITIAL_STATE = Immutable({
   light: defaultLight,
   shouldShowGrid: true,
   showWireframe: false,
-  resetCamera: false
+  resetCamera: false,
+  manipulationType: 'move'
 })
 
 /* ------------- Reducers ------------- */
@@ -60,6 +63,14 @@ const resetCameraComplete = (state) => {
 
 const toggleShowGrid = (state) => {
   return state.merge({shouldShowGrid: !state.shouldShowGrid})
+}
+
+const switchToMoveManipulators = (state) => {
+  return state.merge({manipulationType: 'move'})
+}
+
+const switchToSizeManipulators = (state) => {
+  return state.merge({manipulationType: 'size'})
 }
 
 const toggleWireframe = (state) => {
@@ -82,5 +93,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.RESET_CAMERA]: resetCamera,
   [Types.RESET_CAMERA_COMPLETE]: resetCameraComplete,
   [Types.TOGGLE_SHOW_GRID]: toggleShowGrid,
-  [Types.TOGGLE_WIREFRAME]: toggleWireframe
+  [Types.TOGGLE_WIREFRAME]: toggleWireframe,
+  [Types.SWITCH_TO_MOVE_MANIPULATORS]: switchToMoveManipulators,
+  [Types.SWITCH_TO_SIZE_MANIPULATORS]: switchToSizeManipulators
 })
