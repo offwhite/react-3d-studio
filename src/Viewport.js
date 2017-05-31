@@ -251,8 +251,8 @@ const mapDispatchToProps = (dispatch) =>{
       dispatch(ViewportActions.resetCameraComplete()),
     setPrimitivePosition: (position, axis) =>
       dispatch(PrimitivesActions.setPrimitivePosition(position, axis)),
-    setPrimitiveSize: (cursorPosition, axis) =>
-      dispatch(PrimitivesActions.setPrimitiveSize(cursorPosition, axis)),
+    setPrimitiveSize: (size, axis) =>
+      dispatch(PrimitivesActions.setPrimitiveSize(size, axis)),
     selectPrimitive: (primitiveId) =>
       dispatch(PrimitivesActions.selectPrimitive(primitiveId))
   }

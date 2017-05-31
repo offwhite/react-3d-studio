@@ -17,6 +17,9 @@ class MoveGizmo extends Component {
       camera:               PropTypes.instanceOf(THREE.PerspectiveCamera),
 
       position:             PropTypes.object.isRequired,
+      size:                 PropTypes.object.isRequired,
+      axisDimensionMap:     PropTypes.object.isRequired,
+
       visible:              PropTypes.boolean.isRequired,
       setPrimitivePosition: PropTypes.func.isRequired
     }
@@ -34,6 +37,16 @@ class MoveGizmo extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('mouseup', this._onDocumentMouseUp);
+  }
+
+  getShaftLength = (axis) => {
+    const {size, axisDimensionMap} = this.props
+    const dimension = axisDimensionMap[axis]
+    const totalSize = ((size[dimension]))
+    if(dimension == 'radius'){
+      return (totalSize + this.overlap)
+    }
+    return ((totalSize / 2) + this.overlap)
   }
 
   // ------- LIFES A DRAG ------------
@@ -124,11 +137,7 @@ class MoveGizmo extends Component {
 
     const {size, visible} = this.props
 
-    const shaftLength = {
-      x: ((size.width/2) + this.overlap),
-      y: ((size.height/2) + this.overlap),
-      z: ((size.depth/2) + this.overlap),
-    }[axis]
+    const shaftLength = this.getShaftLength(axis)
 
     const rotation = {
       x: this.euler({x: 0, y: 0, z: -1.57}),

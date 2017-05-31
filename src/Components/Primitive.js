@@ -22,6 +22,7 @@ class Primitive extends Component {
       position:             PropTypes.object.isRequired,
       rotation:             PropTypes.object.isRequired,
       size:                 PropTypes.object.isRequired,
+      axisDimensionMap:     PropTypes.object.isRequired,
       color:                PropTypes.string.isRequired,
       selected:             PropTypes.bool,
       name:                 PropTypes.string,
@@ -68,15 +69,6 @@ class Primitive extends Component {
 
   /* -- end mouse interation ------- */
 
-  getGixmoSizes(){
-    const { type, size } = this.props
-    return {
-      box: size,
-      sphere: {width: size.radius, height: size.radius, depth: size.radius},
-      cylinder: {width: size.radius, height: size.height, depth: size.radius}
-    }[type]
-  }
-
 
  /* --------- Render geometry ------ */
 
@@ -111,6 +103,7 @@ class Primitive extends Component {
       position,
       rotation,
       size,
+      axisDimensionMap,
       color,
       selected,
       onCreate,
@@ -132,8 +125,8 @@ class Primitive extends Component {
           camera={camera}
           position={position}
           rotation={rotation}
-          primitiveSize={size}
-          size={this.getGixmoSizes()}
+          size={size}
+          axisDimensionMap={axisDimensionMap}
           visible={ selected && manipulationType == 'size' }
           setPrimitiveSize={setPrimitiveSize}
         />
@@ -142,7 +135,8 @@ class Primitive extends Component {
           mouseInput={mouseInput}
           camera={camera}
           position={position}
-          size={this.getGixmoSizes()}
+          size={size}
+          axisDimensionMap={axisDimensionMap}
           visible={ selected && manipulationType == 'move' }
           setPrimitivePosition={setPrimitivePosition}
         />

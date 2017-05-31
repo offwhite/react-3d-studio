@@ -86,6 +86,7 @@ class Primitives extends Component {
         position={this.vector(primitive.position)}
         rotation={this.euler(primitive.rotation)}
         size={primitive.size}
+        axisDimensionMap={primitive.axisDimensionMap}
         color={primitive.color}
       />
     )
