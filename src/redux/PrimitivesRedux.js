@@ -81,27 +81,6 @@ const radians = (degrees) => {
   return (degrees * (Math.PI/180))
 }
 
-// gives you the total distance in 3d space
-const distanceVector = ( v1, v2 ) => {
-    var dx = v1.x - v2.x;
-    var dy = v1.y - v2.y;
-    var dz = v1.z - v2.z;
-    return Math.sqrt( dx * dx + dy * dy + dz * dz );
-}
-
-// gives you an object of each diff
-const vectorDeltas = ( v1, v2 ) => {
-    return {
-      x: (v1.x - v2.x),
-      y: (v1.y - v2.y),
-      z: (v1.z - v2.z)
-    }
-}
-
-
-
-
-
 /* -------- Array Manipulation ----------- */
 
 const addPrimitiveToArray = (primitives, primitive) => {
@@ -118,15 +97,6 @@ const addPrimitiveToArray = (primitives, primitive) => {
 
 
 /* -------- Primitive Manipulation ---------- */
-
-const transformPrimitivePosition = (primitive, distance, axis) => {
-  primitive.position = {
-    x: axis === 'x' ? (primitive.position.x + distance) : primitive.position.x,
-    y: axis === 'y' ? (primitive.position.y + distance) : primitive.position.y,
-    z: axis === 'z' ? (primitive.position.z + distance) : primitive.position.z,
-  }
-  return Immutable(primitive)
-}
 
 const setExplicitPrimitivePosition = (primitive, newPosition, axis) => {
   primitive.position = {

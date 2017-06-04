@@ -53,7 +53,7 @@ class SizeGizmo extends Component {
     const {size, axisDimensionMap} = this.props
     const dimension = axisDimensionMap[axis]
     const totalSize = ((size[dimension]))
-    if(dimension == 'radius'){
+    if(dimension === 'radius'){
       return (totalSize + this.overlap)
     }
     return ((totalSize / 2) + this.overlap)
@@ -62,7 +62,7 @@ class SizeGizmo extends Component {
   /* ---------- LIFES A DRAG ------------ */
 
   _onMouseDown = (event, intersection, axis) => {
-    const { visible, camera, position, size } = this.props
+    const { visible, size } = this.props
 
     event.preventDefault()
     event.stopPropagation()
@@ -97,8 +97,6 @@ class SizeGizmo extends Component {
 
     const {
       mouseInput,
-      size,
-      position,
       setPrimitiveSize,
       axisDimensionMap
     } = this.props;
@@ -155,7 +153,6 @@ class SizeGizmo extends Component {
     return (
       <group
         rotation={rotation}
-        visible={visible}
         visible={visible}
       >
         <mesh

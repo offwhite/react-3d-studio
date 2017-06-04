@@ -5,6 +5,11 @@ import ViewportActions from './redux/ViewportRedux'
 
 class KeyboardShortcuts extends Component {
 
+  allowedShortcut(key){
+    console.log(key);
+    return ["g"].includes(key)
+  }
+
   componentDidMount() {
     document.addEventListener('keydown', this.keydown.bind(this), false)
     document.removeEventListener('keyup', this.keydown.bind(this), false)
@@ -20,13 +25,16 @@ class KeyboardShortcuts extends Component {
       toggleShowGrid,
       switchToMoveManipulators,
       switchToSizeManipulators,
+      switchToRotateManipulators,
       toggleWireframe,
       resetCamera
     } = this.props
+
     return {
       g: toggleShowGrid,
       w: switchToMoveManipulators,
       e: switchToSizeManipulators,
+      r: switchToRotateManipulators,
       m: toggleWireframe,
       c: resetCamera
     }[key]
@@ -34,7 +42,9 @@ class KeyboardShortcuts extends Component {
 
   keydown(event) {
     window.removeEventListener('keydown', this.keydown)
-    this.shortcuts([event.key])()
+    const shortcutMethod = this.shortcuts([event.key])
+    if(typeof(shortcutMethod) === 'function')
+      this.shortcuts([event.key])()
   }
 
   keyup() {
@@ -52,7 +62,8 @@ const mapDispatchToProps = (dispatch) =>{
     toggleShowGrid: () => dispatch(ViewportActions.toggleShowGrid()),
     toggleWireframe: () => dispatch(ViewportActions.toggleWireframe()),
     switchToMoveManipulators: () => dispatch(ViewportActions.switchToMoveManipulators()),
-    switchToSizeManipulators: () => dispatch(ViewportActions.switchToSizeManipulators())
+    switchToSizeManipulators: () => dispatch(ViewportActions.switchToSizeManipulators()),
+    switchToRotateManipulators: () => dispatch(ViewportActions.switchToRotateManipulators())
   }
 }
 

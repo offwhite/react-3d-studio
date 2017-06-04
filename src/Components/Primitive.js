@@ -5,6 +5,7 @@ import MouseInput from '../ref/MouseInput'
 
 import MoveGizmo from './MoveGizmo'
 import SizeGizmo from './SizeGizmo'
+import RotateGizmo from './RotateGizmo'
 
 class Primitive extends Component {
 
@@ -40,7 +41,14 @@ class Primitive extends Component {
     const { color } = this.props
     const tint = '#0000ff'
     const percentage = 0.5
-    var f=parseInt(color.slice(1),16),t=parseInt(tint.slice(1),16),R1=f>>16,G1=f>>8&0x00FF,B1=f&0x0000FF,R2=t>>16,G2=t>>8&0x00FF,B2=t&0x0000FF;
+    var f=parseInt(color.slice(1),16),
+        t=parseInt(tint.slice(1),16),
+        R1=f>>16,
+        G1=f>>(8&0x00FF),
+        B1=f&0x0000FF,
+        R2=t>>16,
+        G2=t>>(8&0x00FF),
+        B2=t&0x0000FF;
     return "#"+(0x1000000+(Math.round((R2-R1)*percentage)+R1)*0x10000+(Math.round((G2-G1)*percentage)+G1)*0x100+(Math.round((B2-B1)*percentage)+B1)).toString(16).slice(1);
   }
 
@@ -127,7 +135,18 @@ class Primitive extends Component {
           rotation={rotation}
           size={size}
           axisDimensionMap={axisDimensionMap}
-          visible={ selected && manipulationType == 'size' }
+          visible={ selected && manipulationType === 'size' }
+          setPrimitiveSize={setPrimitiveSize}
+        />
+      <RotateGizmo
+          onCreate={onCreate}
+          mouseInput={mouseInput}
+          camera={camera}
+          position={position}
+          rotation={rotation}
+          size={size}
+          axisDimensionMap={axisDimensionMap}
+          visible={ selected && manipulationType === 'rotate' }
           setPrimitiveSize={setPrimitiveSize}
         />
       <MoveGizmo
@@ -137,7 +156,7 @@ class Primitive extends Component {
           position={position}
           size={size}
           axisDimensionMap={axisDimensionMap}
-          visible={ selected && manipulationType == 'move' }
+          visible={ selected && manipulationType === 'move' }
           setPrimitivePosition={setPrimitivePosition}
         />
       <mesh

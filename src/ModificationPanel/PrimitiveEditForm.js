@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import ViewportActions from '../redux/ViewportRedux'
 import PrimitivesActions from '../redux/PrimitivesRedux'
 import './ModificationPanel.css'
 
@@ -22,8 +21,6 @@ class PrimitiveEditForm extends Component {
   }
 
   render() {
-
-    const { selectedPrimitiveId, updatePrimitiveAttribute } = this.props
 
     const primitive = this.getPrimitive()
 

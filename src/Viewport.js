@@ -1,13 +1,14 @@
 import React from 'react'
 import {connect} from 'react-redux'
 
-import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
+import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin'
 import React3 from 'react-three-renderer'
 import * as THREE from 'three'
+import TransformControls from 'three-transformcontrols'
 import './Studio.css'
 
-import TrackballControls from './ref/TrackballControlls';
-import MouseInput from './ref/MouseInput';
+import TrackballControls from './ref/TrackballControlls'
+import MouseInput from './ref/MouseInput'
 
 import ViewportActions from './redux/ViewportRedux'
 import PrimitivesActions from './redux/PrimitivesRedux'
@@ -30,6 +31,7 @@ class Viewport extends React.Component {
     // higher number = more jitter, less PCU cycles.
     this.manualThrottle = 0
     this.manualThrottlePointer = 0
+    this.control = false
   }
 
   shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate;
@@ -65,13 +67,7 @@ class Viewport extends React.Component {
     this._onAnimateInternal()
   }
 
-  componentWillUnmount() {
-      window.removeEventListener("resize", this.updateScreenSize);
-  }
-
   updateScreenSize(){
-    const { mouseInput } = this.refs
-
     this.setState({
       width: window.innerWidth - 300,
       height:window.innerHeight
@@ -85,6 +81,7 @@ class Viewport extends React.Component {
   }
 
   componentWillUnmount() {
+    window.removeEventListener("resize", this.updateScreenSize);
     this.controls.removeEventListener('change', this._onTrackballChange);
     this.controls.dispose();
     delete this.controls;
@@ -103,7 +100,48 @@ class Viewport extends React.Component {
       this._onAnimateInternal()
       this.manualThrottlePointer = 0
     }
-  };
+  }
+
+  updateController(){
+    const { manipulationType } = this.props
+
+    if( this.manipulationType === manipulationType)
+      return
+
+    const mapped = {
+      move: 'translate',
+      size: 'scale',
+      rotate: 'rotate'
+    }[manipulationType]
+
+    this.control.setMode( mapped )
+    this.manipulationType = manipulationType
+  }
+
+  controlerInit() {
+    if (this.control !== false)
+      return
+
+    console.log('setting')
+
+    const {
+      scene,
+      testMesh,
+      camera,
+      renderer,
+      container
+    } = this.refs;
+
+    // add controls
+    this.control = new TransformControls( camera, container )
+    scene.add(this.control)
+    this.control.attach(testMesh)
+    this.control.addEventListener( 'change', this.update );
+  }
+
+  update(e){
+    console.log(e)
+  }
 
   _onAnimateInternal() {
 
@@ -137,6 +175,9 @@ class Viewport extends React.Component {
       this.controls.reset()
       resetCameraComplete()
     }
+
+    this.controlerInit()
+    this.updateController()
 
   }
 
@@ -172,17 +213,18 @@ class Viewport extends React.Component {
         ref="container"
       >
         <React3
-        antialias
-        mainCamera="mainCamera"
-        width={width}
-        height={height}
-        onAnimate={this._onAnimate}
-        gammaInput
-        gammaOutput
-        shadowMapEnabled
-        shadowMapType={THREE.PCFShadowMap}
-        clearColor={0x666666}
-      >
+          ref='renderer'
+          antialias
+          mainCamera="mainCamera"
+          width={width}
+          height={height}
+          onAnimate={this._onAnimate}
+          gammaInput
+          gammaOutput
+          shadowMapEnabled
+          shadowMapType={THREE.PCFShadowMap}
+          clearColor={0x666666}
+        >
         <module
           ref="mouseInput"
           descriptor={MouseInput}
@@ -210,6 +252,25 @@ class Viewport extends React.Component {
               colorCenterLine={'#ff0000'}
             />
           }
+
+          <mesh
+            castShadow
+            receiveShadow
+            position={ new THREE.Vector3(0,0,0) }
+            rotation={ new THREE.Euler(0,0,0) }
+
+            ref={'testMesh'}
+          >
+            <boxGeometry
+             width={100}
+             height={100}
+             depth={100}
+           />
+            <meshLambertMaterial
+              color={'#cccccc'}
+              wireframe={false}
+            />
+          </mesh>
 
           <Primitives
             primitivesList={primitivesList}

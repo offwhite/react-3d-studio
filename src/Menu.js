@@ -28,6 +28,7 @@ class Menu extends Component {
       addPrimitive,
       switchToMoveManipulators,
       switchToSizeManipulators,
+      switchToRotateManipulators,
       manipulationType
     } = this.props
 
@@ -50,6 +51,12 @@ class Menu extends Component {
           onClick={() => {switchToSizeManipulators()}}
           >
           size
+        </div>
+        <div
+          className={manipulationType === 'rotate' ? 'button active' : 'button'}
+          onClick={() => {switchToRotateManipulators()}}
+          >
+          rotate
         </div>
         <div
           className={showWireframe ? 'button active' : 'button'}
@@ -101,6 +108,7 @@ const mapDispatchToProps = (dispatch) =>{
     toggleWireframe: () => dispatch(ViewportActions.toggleWireframe()),
     switchToMoveManipulators: () => dispatch(ViewportActions.switchToMoveManipulators()),
     switchToSizeManipulators: () => dispatch(ViewportActions.switchToSizeManipulators()),
+    switchToRotateManipulators: () => dispatch(ViewportActions.switchToRotateManipulators()),
     addPrimitive: (primitiveType) =>
       dispatch(PrimitivesActions.addPrimitive(primitiveType)),
   }

@@ -1,7 +1,4 @@
 import React, {Component} from 'react'
-import ViewportActions from '../redux/ViewportRedux'
-import PrimitivesActions from '../redux/PrimitivesRedux'
-
 import PrimitivesList from './PrimitivesList'
 import PrimitiveEditForm from './PrimitiveEditForm'
 import './ModificationPanel.css'

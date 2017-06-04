@@ -11,7 +11,8 @@ const {Types, Creators} = createActions({
   toggleShowGrid: null,
   toggleWireframe: null,
   switchToMoveManipulators: null,
-  switchToSizeManipulators: null
+  switchToSizeManipulators: null,
+  switchToRotateManipulators: null
 })
 
 export const ViewportTypes = Types
@@ -73,6 +74,10 @@ const switchToSizeManipulators = (state) => {
   return state.merge({manipulationType: 'size'})
 }
 
+const switchToRotateManipulators = (state) => {
+  return state.merge({manipulationType: 'rotate'})
+}
+
 const toggleWireframe = (state) => {
   return state.merge({showWireframe: !state.showWireframe})
 }
@@ -95,5 +100,6 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.TOGGLE_SHOW_GRID]: toggleShowGrid,
   [Types.TOGGLE_WIREFRAME]: toggleWireframe,
   [Types.SWITCH_TO_MOVE_MANIPULATORS]: switchToMoveManipulators,
-  [Types.SWITCH_TO_SIZE_MANIPULATORS]: switchToSizeManipulators
+  [Types.SWITCH_TO_SIZE_MANIPULATORS]: switchToSizeManipulators,
+  [Types.SWITCH_TO_ROTATE_MANIPULATORS]: switchToRotateManipulators,
 })

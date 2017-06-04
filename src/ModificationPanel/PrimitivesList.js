@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import ViewportActions from '../redux/ViewportRedux'
 import PrimitivesActions from '../redux/PrimitivesRedux'
 import './ModificationPanel.css'
 
