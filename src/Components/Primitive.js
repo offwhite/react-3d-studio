@@ -73,9 +73,9 @@ class Primitive extends Component {
   _onMouseDown = (event, intersection) => {
     const {id, selectPrimitive, selected, showWireframe} = this.props
     event.preventDefault()
-    event.stopPropagation()
 
     if(!selected){
+      event.stopPropagation()
       selectPrimitive(id)
       this.controllerInit(this.mesh)
     }
