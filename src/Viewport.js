@@ -56,14 +56,20 @@ class Viewport extends React.Component {
     controls.noPan = false;
     controls.staticMoving = true;
     controls.dynamicDampingFactor = 0.3;
-
     controls.zoom = 10;
 
     this.controls = controls;
 
-    //this.controls.addEventListener('change', this._onTrackballChange)
+    this.controls.addEventListener('click', this.deselect.bind(this))
     window.addEventListener("resize", this.updateScreenSize.bind(this))
+    //container.addEventListener("click", this.deselect.bind(this))
     this._onAnimateInternal()
+  }
+
+  deselect(){
+    const { selectedPrimitiveId, selectPrimitive } = this.props
+    if(selectedPrimitiveId !== null)
+      selectPrimitive(selectedPrimitiveId)
   }
 
   updateScreenSize(){
@@ -80,15 +86,15 @@ class Viewport extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.updateScreenSize);
-    this.controls.removeEventListener('change', this._onTrackballChange);
-    this.controls.dispose();
-    delete this.controls;
+    window.removeEventListener("resize", this.updateScreenSize)
+    this.controls.removeEventListener('click', this._onTrackballClick)
+    this.controls.dispose()
+    delete this.controls
   }
 
   _onPrimitivesMounted = (primitives) => {
-    this.primitives = primitives;
-  };
+    this.primitives = primitives
+  }
 
   // ==== FRAME ====
 

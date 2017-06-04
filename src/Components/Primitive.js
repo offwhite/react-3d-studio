@@ -73,10 +73,14 @@ class Primitive extends Component {
   _onMouseDown = (event, intersection) => {
     const {id, selectPrimitive, selected, showWireframe} = this.props
     event.preventDefault()
-    //event.stopPropagation()
-    if (!showWireframe && !selected)
+    event.stopPropagation()
+
+    if(!selected){
       selectPrimitive(id)
+      this.controllerInit(this.mesh)
+    }
   }
+
   _onMouseLeave = (event, intersection) => {
     event.preventDefault()
     event.stopPropagation()
@@ -86,7 +90,20 @@ class Primitive extends Component {
     const {onCreate} = this.props
     onCreate(mesh)
     this.controllerInit(mesh)
-  };
+  }
+
+  deselect(){
+    const { scene } = this.props
+
+    if(this.control === false)
+      return
+
+    this.control.removeEventListener( 'change', this.updatePrimitive)
+    this.control.detach(this.mesh)
+    scene.remove(this.control)
+    this.control = false
+    return
+  }
 
   /* -- Transform controller ------- */
 
@@ -101,8 +118,6 @@ class Primitive extends Component {
       camera,
       container
     } = this.props
-
-    const { controllerMesh } = this.refs
 
     // add controls
     this.control = new TransformControls( camera, container )
@@ -132,8 +147,14 @@ class Primitive extends Component {
       setExplicitPosition,
       setExplicitRotation,
       setExplicitSize,
+      selected,
       size
     } = this.props
+
+    if(!selected){
+      this.deselect()
+      return
+    }
 
     if(
       this.primitivePosition.x !== this.mesh.position.x ||
@@ -212,13 +233,9 @@ class Primitive extends Component {
     const {
       position,
       rotation,
-      size,
       axisDimensionMap,
       color,
       selected,
-      onCreate,
-      mouseInput,
-      camera,
       showWireframe,
       manipulationType
     } = this.props

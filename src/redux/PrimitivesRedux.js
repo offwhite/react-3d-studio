@@ -163,6 +163,8 @@ const setExplicitPrimitiveAttribute = (primitive, scope, attributeName, value) =
 /* --------- primitive list modifiers -------- */
 
 const selectedPrimitive = (state) => {
+  if (state.selectedPrimitiveId === null)
+    return state
   // make primitiveList mutable
   const mutablePrimitives = Immutable.asMutable(state.primitivesList)
   // get the relevant primitive
