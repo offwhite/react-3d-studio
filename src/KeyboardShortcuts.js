@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 
 import ViewportActions from './redux/ViewportRedux'
+import PrimitivesActions from './redux/PrimitivesRedux'
 
 class KeyboardShortcuts extends Component {
 
@@ -20,6 +21,11 @@ class KeyboardShortcuts extends Component {
     document.removeEventListener('keyup', this.keydown, false)
   }
 
+  addBoxPrimitive() {
+    const { addPrimitive } = this.props
+    addPrimitive('box')
+  }
+
   shortcuts(key) {
     const {
       toggleShowGrid,
@@ -36,7 +42,8 @@ class KeyboardShortcuts extends Component {
       e: switchToSizeManipulators,
       r: switchToRotateManipulators,
       m: toggleWireframe,
-      c: resetCamera
+      c: resetCamera,
+      b: this.addBoxPrimitive.bind(this)
     }[key]
   }
 
@@ -63,7 +70,9 @@ const mapDispatchToProps = (dispatch) =>{
     toggleWireframe: () => dispatch(ViewportActions.toggleWireframe()),
     switchToMoveManipulators: () => dispatch(ViewportActions.switchToMoveManipulators()),
     switchToSizeManipulators: () => dispatch(ViewportActions.switchToSizeManipulators()),
-    switchToRotateManipulators: () => dispatch(ViewportActions.switchToRotateManipulators())
+    switchToRotateManipulators: () => dispatch(ViewportActions.switchToRotateManipulators()),
+    addPrimitive: (primitiveType) =>
+      dispatch(PrimitivesActions.addPrimitive(primitiveType)),
   }
 }
 

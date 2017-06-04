@@ -4,7 +4,6 @@ import {connect} from 'react-redux'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin'
 import React3 from 'react-three-renderer'
 import * as THREE from 'three'
-import TransformControls from 'three-transformcontrols'
 import './Studio.css'
 
 import TrackballControls from './ref/TrackballControlls'
@@ -102,47 +101,6 @@ class Viewport extends React.Component {
     }
   }
 
-  updateController(){
-    const { manipulationType } = this.props
-
-    if( this.manipulationType === manipulationType)
-      return
-
-    const mapped = {
-      move: 'translate',
-      size: 'scale',
-      rotate: 'rotate'
-    }[manipulationType]
-
-    this.control.setMode( mapped )
-    this.manipulationType = manipulationType
-  }
-
-  controlerInit() {
-    if (this.control !== false)
-      return
-
-    console.log('setting')
-
-    const {
-      scene,
-      testMesh,
-      camera,
-      renderer,
-      container
-    } = this.refs;
-
-    // add controls
-    this.control = new TransformControls( camera, container )
-    scene.add(this.control)
-    this.control.attach(testMesh)
-    this.control.addEventListener( 'change', this.update );
-  }
-
-  update(e){
-    console.log(e)
-  }
-
   _onAnimateInternal() {
 
     const { resetCamera, resetCameraComplete } = this.props
@@ -150,18 +108,17 @@ class Viewport extends React.Component {
     const {
       mouseInput,
       camera,
-    } = this.refs;
+      container,
+      scene
+    } = this.refs
 
     if (!mouseInput.isReady()) {
-      const {
-        scene,
-        container,
-      } = this.refs;
-
       mouseInput.ready(scene, container, camera)
       mouseInput.restrictIntersections(this.primitives)
       mouseInput.setActive(false)
     }
+
+    // ---- set state ----
 
     if (this.state.mouseInput !== mouseInput)
       this.setState({mouseInput})
@@ -169,15 +126,18 @@ class Viewport extends React.Component {
     if (this.state.camera !== camera)
       this.setState({camera})
 
+    if (this.state.container !== container)
+      this.setState({container})
+
+    if (this.state.scene !== scene)
+      this.setState({scene})
+
     this.controls.update()
 
     if (resetCamera){
       this.controls.reset()
       resetCameraComplete()
     }
-
-    this.controlerInit()
-    this.updateController()
 
   }
 
@@ -190,9 +150,11 @@ class Viewport extends React.Component {
     const {
       mouseInput,
       camera,
+      scene,
+      container,
       width,
       height
-    } = this.state;
+    } = this.state
 
     const {
       cameraState,
@@ -202,8 +164,9 @@ class Viewport extends React.Component {
       primitivesList,
       selectPrimitive,
       selectedPrimitiveId,
-      setPrimitivePosition,
-      setPrimitiveSize,
+      setExplicitPosition,
+      setExplicitRotation,
+      setExplicitSize,
       manipulationType
     } = this.props
 
@@ -253,34 +216,18 @@ class Viewport extends React.Component {
             />
           }
 
-          <mesh
-            castShadow
-            receiveShadow
-            position={ new THREE.Vector3(0,0,0) }
-            rotation={ new THREE.Euler(0,0,0) }
-
-            ref={'testMesh'}
-          >
-            <boxGeometry
-             width={100}
-             height={100}
-             depth={100}
-           />
-            <meshLambertMaterial
-              color={'#cccccc'}
-              wireframe={false}
-            />
-          </mesh>
-
           <Primitives
             primitivesList={primitivesList}
             mouseInput={mouseInput}
             camera={camera}
+            scene={scene}
+            container={container}
             onPrimitivesMounted={this._onPrimitivesMounted}
             selectPrimitive={selectPrimitive}
             selectedPrimitiveId={selectedPrimitiveId}
-            setPrimitivePosition={setPrimitivePosition}
-            setPrimitiveSize={setPrimitiveSize}
+            setExplicitPosition={setExplicitPosition}
+            setExplicitRotation={setExplicitRotation}
+            setExplicitSize={setExplicitSize}
             showWireframe={showWireframe}
             manipulationType={manipulationType}
           />
@@ -310,10 +257,12 @@ const mapDispatchToProps = (dispatch) =>{
     startApp: () => dispatch(ViewportActions.startApp()),
     resetCameraComplete: () =>
       dispatch(ViewportActions.resetCameraComplete()),
-    setPrimitivePosition: (position, axis) =>
-      dispatch(PrimitivesActions.setPrimitivePosition(position, axis)),
-    setPrimitiveSize: (size, axis) =>
-      dispatch(PrimitivesActions.setPrimitiveSize(size, axis)),
+    setExplicitPosition: (position) =>
+      dispatch(PrimitivesActions.setExplicitPosition(position)),
+    setExplicitRotation: (rotation) =>
+      dispatch(PrimitivesActions.setExplicitRotation(rotation)),
+    setExplicitSize: (size) =>
+      dispatch(PrimitivesActions.setExplicitSize(size)),
     selectPrimitive: (primitiveId) =>
       dispatch(PrimitivesActions.selectPrimitive(primitiveId))
   }

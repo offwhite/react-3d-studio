@@ -3,9 +3,7 @@ import PropTypes from 'prop-types'
 import * as THREE from 'three'
 import MouseInput from '../ref/MouseInput'
 
-import MoveGizmo from './MoveGizmo'
-import SizeGizmo from './SizeGizmo'
-import RotateGizmo from './RotateGizmo'
+import TransformControls from 'three-transformcontrols'
 
 class Primitive extends Component {
 
@@ -14,10 +12,12 @@ class Primitive extends Component {
       onCreate:             PropTypes.func.isRequired,
       onDestroy:            PropTypes.func.isRequired,
       id:                   PropTypes.integer.isRequired,
+      container:            PropTypes.object.isRequired,
+      scene:                PropTypes.object.isRequired,
       mouseInput:           PropTypes.instanceOf(MouseInput),
       camera:               PropTypes.instanceOf(THREE.PerspectiveCamera),
       setPrimitivePosition: PropTypes.func.isRequired,
-      setPrimitiveSize:     PropTypes.func.isRequired,
+      setExplicitSize:      PropTypes.func.isRequired,
       manipulationType:     PropTypes.string.isRequired,
 
       position:             PropTypes.object.isRequired,
@@ -31,10 +31,22 @@ class Primitive extends Component {
     }
   }
 
+  constructor(props, context) {
+    super(props, context)
+    this.control = false
+    this.primitiveRotation = false
+    this.primitivePosition = false
+    this.primitiveScale = {x: 1, y: 1, z: 1}
+  }
+
   componentWillUnmount = () => {
     const { onDestroy, mouseInput } = this.props
     mouseInput.flagClearIntersetions()
     onDestroy()
+  }
+
+  componentDidUpdate(newProps) {
+    this.updateController()
   }
 
   selectedColor = () => {
@@ -54,28 +66,119 @@ class Primitive extends Component {
 
 
   _onMouseEnter = (event, intersection) => {
-    event.preventDefault();
-    event.stopPropagation();
+    event.preventDefault()
+    event.stopPropagation()
   }
 
   _onMouseDown = (event, intersection) => {
-    const {id, selectPrimitive, showWireframe} = this.props
+    const {id, selectPrimitive, selected, showWireframe} = this.props
     event.preventDefault()
-    event.stopPropagation()
-    if (!showWireframe)
+    //event.stopPropagation()
+    if (!showWireframe && !selected)
       selectPrimitive(id)
   }
   _onMouseLeave = (event, intersection) => {
-    event.preventDefault();
-    event.stopPropagation();
+    event.preventDefault()
+    event.stopPropagation()
   }
 
   _ref = (mesh) => {
-    const {onCreate} = this.props;
-    onCreate(mesh);
+    const {onCreate} = this.props
+    onCreate(mesh)
+    this.controllerInit(mesh)
   };
 
-  /* -- end mouse interation ------- */
+  /* -- Transform controller ------- */
+
+  controllerInit(mesh) {
+    if (this.control !== false)
+      return
+
+    this.mesh = mesh
+
+    const {
+      scene,
+      camera,
+      container
+    } = this.props
+
+    const { controllerMesh } = this.refs
+
+    // add controls
+    this.control = new TransformControls( camera, container )
+    scene.add(this.control)
+    this.control.attach(mesh)
+    this.control.addEventListener( 'change', this.updatePrimitive.bind(this) )
+
+    // set defaults
+    this.primitiveRotation = this.mesh.rotation
+  }
+
+
+  updateController(){
+    const { manipulationType } = this.props
+
+    if(
+      this.control === false ||
+      this.control.getMode === manipulationType
+    )
+      return
+
+    this.control.setMode( manipulationType )
+  }
+
+  updatePrimitive(){
+    const {
+      setExplicitPosition,
+      setExplicitRotation,
+      setExplicitSize,
+      size
+    } = this.props
+
+    if(
+      this.primitivePosition.x !== this.mesh.position.x ||
+      this.primitivePosition.y !== this.mesh.position.y ||
+      this.primitivePosition.z !== this.mesh.position.z
+    ){
+      setExplicitPosition(this.mesh.position)
+      this.primitivePosition = this.mesh.position.clone()
+    }
+
+    if(
+      this.primitiveRotation._x !== this.mesh.rotation._x ||
+      this.primitiveRotation._y !== this.mesh.rotation._y ||
+      this.primitiveRotation._z !== this.mesh.rotation._z
+    ){
+      const newRotation = {
+        x: this.mesh.rotation._x,
+        y: this.mesh.rotation._y,
+        z: this.mesh.rotation._z
+      }
+      setExplicitRotation(newRotation)
+      this.primitiveRotation = this.mesh.rotation.clone()
+    }
+
+    if(
+      this.primitiveScale.x !== this.mesh.scale.x ||
+      this.primitiveScale.y !== this.mesh.scale.y ||
+      this.primitiveScale.z !== this.mesh.scale.z
+    ){
+      const newSize = {
+        width: this.cleanScale(size.width + this.mesh.scale.x - this.primitiveScale.x),
+        height: this.cleanScale(size.height + this.mesh.scale.y - this.primitiveScale.y),
+        depth: this.cleanScale(size.depth + this.mesh.scale.z - this.primitiveScale.z)
+      }
+      setExplicitSize(newSize)
+      this.mesh.scale.set( 1, 1, 1 )
+      this.primitiveScale = this.mesh.scale.clone()
+    }
+  }
+
+  cleanScale(scale){
+    if(scale > 2000)
+      return 2000
+    return scale < 1 ? 1 : scale
+  }
 
 
  /* --------- Render geometry ------ */
@@ -104,7 +207,6 @@ class Primitive extends Component {
     }[type]
   }
 
-
   render() {
 
     const {
@@ -117,8 +219,6 @@ class Primitive extends Component {
       onCreate,
       mouseInput,
       camera,
-      setPrimitivePosition,
-      setPrimitiveSize,
       showWireframe,
       manipulationType
     } = this.props
@@ -127,38 +227,6 @@ class Primitive extends Component {
 
     return (
       <group>
-        <SizeGizmo
-          onCreate={onCreate}
-          mouseInput={mouseInput}
-          camera={camera}
-          position={position}
-          rotation={rotation}
-          size={size}
-          axisDimensionMap={axisDimensionMap}
-          visible={ selected && manipulationType === 'size' }
-          setPrimitiveSize={setPrimitiveSize}
-        />
-      <RotateGizmo
-          onCreate={onCreate}
-          mouseInput={mouseInput}
-          camera={camera}
-          position={position}
-          rotation={rotation}
-          size={size}
-          axisDimensionMap={axisDimensionMap}
-          visible={ selected && manipulationType === 'rotate' }
-          setPrimitiveSize={setPrimitiveSize}
-        />
-      <MoveGizmo
-          onCreate={onCreate}
-          mouseInput={mouseInput}
-          camera={camera}
-          position={position}
-          size={size}
-          axisDimensionMap={axisDimensionMap}
-          visible={ selected && manipulationType === 'move' }
-          setPrimitivePosition={setPrimitivePosition}
-        />
       <mesh
         castShadow
         receiveShadow

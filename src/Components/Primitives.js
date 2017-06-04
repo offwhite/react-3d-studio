@@ -12,12 +12,15 @@ class Primitives extends Component {
       primitivesList:       PropTypes.object.isRequired,
       mouseInput:           PropTypes.instanceOf(MouseInput),
       camera:               PropTypes.instanceOf(THREE.PerspectiveCamera),
+      container:            PropTypes.object.isRequired,
+      scene:                PropTypes.object.isRequired,
 
       onPrimitivesMounted:  PropTypes.func.isRequired,
       selectPrimitive:      PropTypes.func.isRequired,
       selectedPrimitiveId:  PropTypes.integer.isRequired,
-      setPrimitivePosition: PropTypes.func.isRequired,
-      setPrimitiveSize:     PropTypes.func.isRequired,
+      setExplicitPosition:  PropTypes.func.isRequired,
+      setExplicitRotation:  PropTypes.func.isRequired,
+      setExplicitSize:      PropTypes.func.isRequired,
       manipulationType:     PropTypes.string.isRequired
     }
   }
@@ -60,9 +63,12 @@ class Primitives extends Component {
     const {
       mouseInput,
       camera,
+      container,
+      scene,
       selectPrimitive,
-      setPrimitivePosition,
-      setPrimitiveSize,
+      setExplicitPosition,
+      setExplicitRotation,
+      setExplicitSize,
       showWireframe,
       manipulationType
     } = this.props
@@ -73,16 +79,22 @@ class Primitives extends Component {
         onDestroy={this._onPrimitivesDestroy}
         id={key}
         key={key}
+
         mouseInput={mouseInput}
         camera={camera}
+        scene={scene}
+        container={container}
+
         selectPrimitive={selectPrimitive}
         selected={selected}
-        setPrimitivePosition={setPrimitivePosition}
-        setPrimitiveSize={setPrimitiveSize}
+        setExplicitPosition={setExplicitPosition}
+        setExplicitRotation={setExplicitRotation}
+        setExplicitSize={setExplicitSize}
         showWireframe={showWireframe}
-        manipulationType={manipulationType}
-        type={primitive.type}
 
+        manipulationType={manipulationType}
+
+        type={primitive.type}
         position={this.vector(primitive.position)}
         rotation={this.euler(primitive.rotation)}
         size={primitive.size}

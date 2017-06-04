@@ -44,7 +44,7 @@ export const INITIAL_STATE = Immutable({
   shouldShowGrid: true,
   showWireframe: false,
   resetCamera: false,
-  manipulationType: 'move'
+  manipulationType: 'translate'
 })
 
 /* ------------- Reducers ------------- */
@@ -67,11 +67,11 @@ const toggleShowGrid = (state) => {
 }
 
 const switchToMoveManipulators = (state) => {
-  return state.merge({manipulationType: 'move'})
+  return state.merge({manipulationType: 'translate'})
 }
 
 const switchToSizeManipulators = (state) => {
-  return state.merge({manipulationType: 'size'})
+  return state.merge({manipulationType: 'scale'})
 }
 
 const switchToRotateManipulators = (state) => {

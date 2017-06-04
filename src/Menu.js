@@ -41,13 +41,13 @@ class Menu extends Component {
           Grid
         </div>
         <div
-          className={manipulationType === 'move' ? 'button active' : 'button'}
+          className={manipulationType === 'translate' ? 'button active' : 'button'}
           onClick={() => {switchToMoveManipulators()}}
           >
           move
         </div>
         <div
-          className={manipulationType === 'size' ? 'button active' : 'button'}
+          className={manipulationType === 'scale' ? 'button active' : 'button'}
           onClick={() => {switchToSizeManipulators()}}
           >
           size

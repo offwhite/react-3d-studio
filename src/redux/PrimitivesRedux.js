@@ -5,8 +5,9 @@ const {Types, Creators} = createActions({
   addPrimitive: ['primitiveType'],
   selectPrimitive: ['primitiveId'],
   highlightPrimitive: ['primitiveId'],
-  setPrimitivePosition: ['position', 'axis'],
-  setPrimitiveSize: ['size', 'axis'],
+  setExplicitPosition: ['position'],
+  setExplicitRotation: ['rotation'],
+  setExplicitSize: ['size'],
   updatePrimitiveAttribute: ['scope', 'attributeName', 'value'],
   deletePrimitive: ['primitiveId']
 })
@@ -99,6 +100,21 @@ const addPrimitiveToArray = (primitives, primitive) => {
 /* -------- Primitive Manipulation ---------- */
 
 const setExplicitPrimitivePosition = (primitive, newPosition, axis) => {
+  primitive.position = newPosition
+  return Immutable(primitive)
+}
+
+const setExplicitPrimitiveRotation = (primitive, newRotation) => {
+  primitive.rotation = newRotation
+  return Immutable(primitive)
+}
+
+const setExplicitPrimitiveSize = (primitive, newSize) => {
+  primitive.size = newSize
+  return Immutable(primitive)
+}
+
+const setPrimitivePositionOnAxis = (primitive, newPosition, axis) => {
   primitive.position = {
     x: axis === 'x' ? newPosition.x : primitive.position.x,
     y: axis === 'y' ? newPosition.y : primitive.position.y,
@@ -107,14 +123,14 @@ const setExplicitPrimitivePosition = (primitive, newPosition, axis) => {
   return Immutable(primitive)
 }
 
-const setExplicitPrimitiveSize = (primitive, newSize, axis) => {
+const setPrimitiveSizeOnAxis = (primitive, newSize, axis) => {
   const mutableSize = Immutable.asMutable(primitive.size)
   mutableSize[axis] = newSize
   primitive.size = Immutable(mutableSize)
   return Immutable(primitive)
 }
 
-const setExplicitPrimitiveRotation = (primitive, value, axis) => {
+const setPrimitiveRotationOnAxis = (primitive, value, axis) => {
   primitive.rotation = {
     x: axis === 'x' ? radians(value) : primitive.rotation.x,
     y: axis === 'y' ? radians(value) : primitive.rotation.y,
@@ -128,16 +144,16 @@ const setExplicitPrimitiveAttribute = (primitive, scope, attributeName, value) =
     primitive[attributeName] = value
   }
   else if (scope === 'position') {
-    primitive = setExplicitPrimitivePosition(primitive, {x: value, y: value, z: value}, attributeName)
+    primitive = setPrimitivePositionOnAxis(primitive, {x: value, y: value, z: value}, attributeName)
   }
   else if (scope === 'size') {
-    primitive = setExplicitPrimitiveSize(primitive, {x: value, y: value, z: value}, attributeName)
+    primitive = setPrimitiveSizeOnAxis(primitive, {x: value, y: value, z: value}, attributeName)
   }
   else if (scope === 'radius') {
-    primitive = setExplicitPrimitiveSize(primitive, {radius: value}, attributeName)
+    primitive = setPrimitiveSizeOnAxis(primitive, {radius: value}, attributeName)
   }
   else if (scope === 'rotation') {
-    primitive = setExplicitPrimitiveRotation(primitive, value, attributeName)
+    primitive = setPrimitiveRotationOnAxis(primitive, value, attributeName)
   }
 
   return Immutable(primitive)
@@ -195,15 +211,22 @@ const selectPrimitive = (state, {primitiveId}) => {
   return state.merge({selectedPrimitiveId: primitiveId})
 }
 
-const setPrimitivePosition = (state, {position, axis}) => {
-  const newPrimitive = setExplicitPrimitivePosition(selectedPrimitive(state), position, axis)
+const setExplicitPosition = (state, {position}) => {
+  const newPrimitive = setExplicitPrimitivePosition(selectedPrimitive(state), position)
   return state.merge({
     primitivesList: replacePrimitiveInList(state, newPrimitive)
   })
 }
 
-const setPrimitiveSize = (state, {size, axis}) => {
-  const newPrimitive = setExplicitPrimitiveSize(selectedPrimitive(state), size, axis)
+const setExplicitRotation = (state, {rotation}) => {
+  const newPrimitive = setExplicitPrimitiveRotation(selectedPrimitive(state), rotation)
+  return state.merge({
+    primitivesList: replacePrimitiveInList(state, newPrimitive)
+  })
+}
+
+const setExplicitSize = (state, {size}) => {
+  const newPrimitive = setExplicitPrimitiveSize(selectedPrimitive(state), size)
   return state.merge({
     primitivesList: replacePrimitiveInList(state, newPrimitive)
   })
@@ -242,8 +265,9 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.ADD_PRIMITIVE]: addPrimitive,
   [Types.HIGHLIGHT_PRIMITIVE]: highlightPrimitive,
   [Types.SELECT_PRIMITIVE]: selectPrimitive,
-  [Types.SET_PRIMITIVE_POSITION]: setPrimitivePosition,
-  [Types.SET_PRIMITIVE_SIZE]: setPrimitiveSize,
+  [Types.SET_EXPLICIT_POSITION]: setExplicitPosition,
+  [Types.SET_EXPLICIT_ROTATION]: setExplicitRotation,
+  [Types.SET_EXPLICIT_SIZE]: setExplicitSize,
   [Types.UPDATE_PRIMITIVE_ATTRIBUTE]: updatePrimitiveAttribute,
   [Types.DELETE_PRIMITIVE]: deletePrimitive
 })
