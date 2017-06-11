@@ -12,12 +12,70 @@
 }
 
 .button {
-  margin: 5px;
+  position: relative;
+  margin: 3px;
   border: solid 1px #666666;
+  color: #666666;
   padding: 5px;
   float: left;
+  width: 35px;
+  height: 35px;
+  box-sizing: border-box;
+}
+.divider {
+  position: relative;
+  margin: 3px 12px;
+  border-right: solid 1px #666666;
+  color: #666666;
+  float: left;
+  width: 1px;
+  height: 35px;
+  box-sizing: border-box;
 }
 
 .button.active {
   background: #bcc7d2;
+}
+
+.button:before{
+    content: "\f053";
+    font-family: FontAwesome;
+    position: absolute;
+    font-size: 1.5em;
+    top: 6px;
+    left: calc(50% - 11px);
+}
+.button:hover{
+  background: #cdcdcd;
+}
+.button.grid:before{
+    content: "\f00a";
+}
+.button.size:before{
+    content: "\f0b2";
+}
+.button.rotate:before{
+    content: "\f01e";
+}
+.button.move:before{
+    content: "\f047";
+}
+.button.wireframe:before{
+    content: "\f2dc";
+}
+.button.reset-camera:before{
+    content: "\f03d";
+}
+
+.button.new-box:before{
+    content: "\f1b2";
+}
+.button.new-ball:before{
+    content: "\f111";
+}
+.button.new-cylinder:before{
+    content: "\f192";
+}
+.button.export:before{
+    content: "\f045";
 }

@@ -71,7 +71,7 @@ class Primitive extends Component {
   }
 
   _onMouseDown = (event, intersection) => {
-    const {id, selectPrimitive, selected, showWireframe} = this.props
+    const {id, selectPrimitive, selected} = this.props
     event.preventDefault()
 
     if(!selected){
@@ -124,9 +124,6 @@ class Primitive extends Component {
     scene.add(this.control)
     this.control.attach(mesh)
     this.control.addEventListener( 'change', this.updatePrimitive.bind(this) )
-
-    // set defaults
-    this.primitiveRotation = this.mesh.rotation
   }
 
 
@@ -148,6 +145,7 @@ class Primitive extends Component {
       setExplicitRotation,
       setExplicitSize,
       selected,
+      axisDimensionMap,
       size
     } = this.props
 
@@ -184,11 +182,11 @@ class Primitive extends Component {
       this.primitiveScale.y !== this.mesh.scale.y ||
       this.primitiveScale.z !== this.mesh.scale.z
     ){
-      const newSize = {
-        width: this.cleanScale(size.width + this.mesh.scale.x - this.primitiveScale.x),
-        height: this.cleanScale(size.height + this.mesh.scale.y - this.primitiveScale.y),
-        depth: this.cleanScale(size.depth + this.mesh.scale.z - this.primitiveScale.z)
-      }
+      const newSize = {}
+      newSize[axisDimensionMap['x']] = this.cleanScale(size[axisDimensionMap['x']] + this.mesh.scale.x - this.primitiveScale.x)
+      newSize[axisDimensionMap['y']] = this.cleanScale(size[axisDimensionMap['y']] + this.mesh.scale.y - this.primitiveScale.y)
+      newSize[axisDimensionMap['z']] = this.cleanScale(size[axisDimensionMap['z']] + this.mesh.scale.z - this.primitiveScale.z)
+
       setExplicitSize(newSize)
       this.mesh.scale.set( 1, 1, 1 )
       this.primitiveScale = this.mesh.scale.clone()
@@ -233,11 +231,9 @@ class Primitive extends Component {
     const {
       position,
       rotation,
-      axisDimensionMap,
       color,
       selected,
-      showWireframe,
-      manipulationType
+      showWireframe
     } = this.props
 
     const _color = selected ? this.selectedColor() : color

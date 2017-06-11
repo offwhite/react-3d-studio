@@ -32,6 +32,7 @@
 }
 
 .primitivesList .deletePrimitive{
+  display: none;
   position: absolute;
   right: 5px;
   top: 5px;
@@ -43,12 +44,27 @@
   box-shadow: 0 0 10px 0 black;
 }
 
+.PrimitivesExport{
+  margin: 10px 0;
+  height: calc(100% - 370px);
+  border: solid 1px #666666;
+  background-color: #cdcdcd;
+  padding: 10px;
+  overflow: scroll;
+  position: absolute;
+  top: 50px;
+  bottom: 50px;
+  left: 50px;
+  right: 50px;
+}
+
 .primitiveEditForm{
   margin: 10px 0;
   height: calc(100% - 370px);
   border: solid 1px #666666;
   background-color: #cdcdcd;
 }
+
 input {
   width: 100%;
   border: none;

@@ -6,16 +6,18 @@ import Viewport from './Viewport'
 import Menu from './Menu'
 import KeyboardShortcuts from './KeyboardShortcuts'
 import ModificationPanel from './ModificationPanel/ModificationPanel'
+import PrimitivesExport from './ModificationPanel/PrimitivesExport'
 
 // modification panel
-// - set ~color~, ~name~, delete, ~select~, toggle view, toggle wireframe?
-// so there's a couple of choices with intersection objects - firslty, look at the Primitives.primitives, see what's in there
-// an alternative would be to completely wipe all existing primitives, clear the intersectins array in MI, then populate the state again.
-// kinda a clear and reset.
+// look at delete methods
 
-// rotation gizmo - that's gonna be tough
-// maybe wrap all primitives in a group, set the position on the group, then offset an
-// inner group by half the height. that'd put the origin point at one end.
+// sort out the propagation issue on transform gizmo
+// sort ui
+// add export
+// bundle
+
+// increase the number of primitives
+// - add pano
 
 
 class Studio extends Component {
@@ -29,6 +31,7 @@ class Studio extends Component {
           <Menu />
           <ModificationPanel />
           <KeyboardShortcuts />
+          <PrimitivesExport />
         </div>
       </Provider>
     )

@@ -12,7 +12,8 @@ const {Types, Creators} = createActions({
   toggleWireframe: null,
   switchToMoveManipulators: null,
   switchToSizeManipulators: null,
-  switchToRotateManipulators: null
+  switchToRotateManipulators: null,
+  toggleExport: null
 })
 
 export const ViewportTypes = Types
@@ -39,6 +40,7 @@ const defaultLight = {
 }
 
 export const INITIAL_STATE = Immutable({
+  showExport: false,
   camera: defaultCamera,
   light: defaultLight,
   shouldShowGrid: true,
@@ -82,6 +84,10 @@ const toggleWireframe = (state) => {
   return state.merge({showWireframe: !state.showWireframe})
 }
 
+const toggleExport = (state) => {
+  return state.merge({showExport: !state.showExport})
+}
+
 const setCamera = (state, {cameraPosition, cameraRotation}) => {
   return state.merge({
     camera: {
@@ -102,4 +108,5 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.SWITCH_TO_MOVE_MANIPULATORS]: switchToMoveManipulators,
   [Types.SWITCH_TO_SIZE_MANIPULATORS]: switchToSizeManipulators,
   [Types.SWITCH_TO_ROTATE_MANIPULATORS]: switchToRotateManipulators,
+  [Types.TOGGLE_EXPORT]: toggleExport
 })

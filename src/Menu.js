@@ -21,11 +21,17 @@ class Menu extends Component {
     toggleWireframe()
   }
 
+  toggleExport() {
+    const { toggleExport } = this.props
+    toggleExport()
+  }
+
   render() {
     const {
       shouldShowGrid,
       showWireframe,
       addPrimitive,
+      showExport,
       switchToMoveManipulators,
       switchToSizeManipulators,
       switchToRotateManipulators,
@@ -35,59 +41,58 @@ class Menu extends Component {
     return (
       <div className='menu'>
         <div
-          className={shouldShowGrid ? 'button active' : 'button'}
+          className={showExport ? 'button export active' : 'button export'}
+          onClick={() => {this.toggleExport()}}
+          title="Export"
+          ></div>
+        <div className="divider"></div>
+        <div
+          className={shouldShowGrid ? 'button grid active' : 'button grid'}
           onClick={() => {this.toggleShowGrid()}}
-          >
-          Grid
-        </div>
+          title="Grid"
+          ></div>
         <div
-          className={manipulationType === 'translate' ? 'button active' : 'button'}
-          onClick={() => {switchToMoveManipulators()}}
-          >
-          move
-        </div>
-        <div
-          className={manipulationType === 'scale' ? 'button active' : 'button'}
-          onClick={() => {switchToSizeManipulators()}}
-          >
-          size
-        </div>
-        <div
-          className={manipulationType === 'rotate' ? 'button active' : 'button'}
-          onClick={() => {switchToRotateManipulators()}}
-          >
-          rotate
-        </div>
-        <div
-          className={showWireframe ? 'button active' : 'button'}
+          className={showWireframe ? 'button wireframe active' : 'button wireframe'}
           onClick={() => {this.toggleWireframe()}}
-          >
-          Wireframe
-        </div>
+          title="Wireframe"
+          ></div>
         <div
-          className='button'
+          className='button reset-camera'
           onClick={() => {this.resetCamera()}}
-          >
-          reset cam
-        </div>
+          title="Reset Camera"
+          ></div>
+        <div className="divider"></div>
         <div
-          className='button'
+          className={manipulationType === 'translate' ? 'button move active' : 'button move'}
+          onClick={() => {switchToMoveManipulators()}}
+          title="Move"
+          ></div>
+        <div
+          className={manipulationType === 'scale' ? 'button size active' : 'button size'}
+          onClick={() => {switchToSizeManipulators()}}
+          title="Scale"
+          ></div>
+        <div
+          className={manipulationType === 'rotate' ? 'button rotate active' : 'button rotate'}
+          onClick={() => {switchToRotateManipulators()}}
+          title="Rotate"
+          ></div>
+        <div className="divider"></div>
+        <div
+          className='button new-box'
           onClick={() => {addPrimitive('box')}}
-          >
-          box
-        </div>
+          title="New Box"
+          ></div>
         <div
-          className='button'
+          className='button new-ball'
           onClick={() => {addPrimitive('sphere')}}
-          >
-          ball
-        </div>
+          title="new Sphere"
+          ></div>
         <div
-          className='button'
+          className='button new-cylinder'
           onClick={() => {addPrimitive('cylinder')}}
-          >
-          cylinder
-        </div>
+          title="New Cylinder"
+          ></div>
       </div>
     )
   }
@@ -97,7 +102,8 @@ const mapStateToProps = state => {
   return {
     shouldShowGrid: state.viewport.shouldShowGrid,
     showWireframe: state.viewport.showWireframe,
-    manipulationType: state.viewport.manipulationType
+    manipulationType: state.viewport.manipulationType,
+    showExport: state.viewport.showExport
   }
 }
 
@@ -106,6 +112,7 @@ const mapDispatchToProps = (dispatch) =>{
     resetCamera: () => dispatch(ViewportActions.resetCamera()),
     toggleShowGrid: () => dispatch(ViewportActions.toggleShowGrid()),
     toggleWireframe: () => dispatch(ViewportActions.toggleWireframe()),
+    toggleExport: () => dispatch(ViewportActions.toggleExport()),
     switchToMoveManipulators: () => dispatch(ViewportActions.switchToMoveManipulators()),
     switchToSizeManipulators: () => dispatch(ViewportActions.switchToSizeManipulators()),
     switchToRotateManipulators: () => dispatch(ViewportActions.switchToRotateManipulators()),

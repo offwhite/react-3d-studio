@@ -43,8 +43,8 @@ const defaults = {
     },
     axisDimensionMap: {
       x: 'radius',
-      y: 'radius',
-      z: 'radius'
+      y: 'height',
+      z: 'depth'
     },
     position: {x:0, y:0, z:0},
     rotation: {x:0, y:0, z:0},
@@ -60,7 +60,7 @@ const defaults = {
     axisDimensionMap: {
       x: 'radius',
       y: 'height',
-      z: 'radius'
+      z: 'depth'
     },
     position: {x:0, y:0, z:0},
     rotation: {x:0, y:0, z:0},
@@ -150,7 +150,7 @@ const setExplicitPrimitiveAttribute = (primitive, scope, attributeName, value) =
     primitive = setPrimitiveSizeOnAxis(primitive, {x: value, y: value, z: value}, attributeName)
   }
   else if (scope === 'radius') {
-    primitive = setPrimitiveSizeOnAxis(primitive, {radius: value}, attributeName)
+    primitive = setPrimitiveSizeOnAxis(primitive, value, attributeName)
   }
   else if (scope === 'rotation') {
     primitive = setPrimitiveRotationOnAxis(primitive, value, attributeName)

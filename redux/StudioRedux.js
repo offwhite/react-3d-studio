@@ -16,7 +16,7 @@ export default Creators
 /* ------------- Initial State ------------- */
 
 export const INITIAL_STATE = Immutable({
-  exportedFile: '',
+  showExport: false,
   zoom: 0,
   boxes: [
     {
@@ -70,8 +70,8 @@ const addNewBox = (boxes) => {
   return Immutable(mutableBoxes)
 }
 
-const zoom = (state, {zoom}) => {
-  return state.merge({zoom})
+const showExport = (state) => {
+  return state.merge({showExport: true})
 }
 
 // get list of boxes, make it mutable, add to it, make it immutable, return it
@@ -88,7 +88,6 @@ export const exportFile = (state) => {
 }
 
 export function exportedFile(state) {
-  console.log('exportFile: ', state)
   const {boxes} = state
 
   let initString = `import React from 'react';

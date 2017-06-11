@@ -48,7 +48,7 @@ class Primitives extends Component {
   _onPrimitivesDestroy = () => {
     // look at updating the primitives list here. i think that's
     // why MI is fucked on new objects created after a deletion.
-    console.log('destroy', this.primitives)
+    //console.log('destroy', this.primitives)
   }
 
   vector(position) {

@@ -6,11 +6,6 @@ import PrimitivesActions from './redux/PrimitivesRedux'
 
 class KeyboardShortcuts extends Component {
 
-  allowedShortcut(key){
-    console.log(key);
-    return ["g"].includes(key)
-  }
-
   componentDidMount() {
     document.addEventListener('keydown', this.keydown.bind(this), false)
     document.removeEventListener('keyup', this.keydown.bind(this), false)
