@@ -1,11 +1,13 @@
 import {combineReducers} from 'redux'
-import {reducer as studio} from './StudioRedux'
+import {reducer as viewport} from './ViewportRedux'
+import {reducer as primitives} from './PrimitivesRedux'
 import configureStore from './CreateStore'
 
 export default () => {
   /* ------------- Assemble The Reducers ------------- */
   const rootReducer = combineReducers({
-    studio,
+    viewport,
+    primitives
   })
 
   return configureStore(rootReducer)

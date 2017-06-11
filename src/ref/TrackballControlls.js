@@ -80,6 +80,7 @@ class TrackballControls extends THREE.EventDispatcher {
     // events
 
     const changeEvent = { type: 'change' };
+    const clickEvent = { type: 'click' };
     const startEvent = { type: 'start' };
     const endEvent = { type: 'end' };
 
@@ -347,6 +348,15 @@ class TrackballControls extends THREE.EventDispatcher {
       document.removeEventListener('mousemove', mousemove);
       document.removeEventListener('mouseup', mouseup);
       _this.dispatchEvent(endEvent);
+
+      // was this a click
+      _this.endPosition = {x: event.pageX, y: event.pageY};
+      if (
+        event.pageX === _this.startingPosition.x &&
+        event.pageY === _this.startingPosition.y
+      ) {
+        _this.dispatchEvent(clickEvent);
+      }
     }
 
     function mousedown(event) {
@@ -374,6 +384,7 @@ class TrackballControls extends THREE.EventDispatcher {
       document.addEventListener('mouseup', mouseup, false);
 
       _this.dispatchEvent(startEvent);
+      _this.startingPosition = {x: event.pageX, y: event.pageY};
     }
 
 

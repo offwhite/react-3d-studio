@@ -1,6 +1,5 @@
 import {createStore, applyMiddleware, compose} from 'redux'
-//import createSagaMiddleware from 'redux-saga'
-import R from 'ramda'
+import createSagaMiddleware from 'redux-saga'
 import {createLogger} from 'redux-logger'
 
 // creates the store
@@ -10,17 +9,16 @@ export default (rootReducer, rootSaga) => {
   const middleware = []
   const enhancers = []
 
-  /* ------------- Saga Middleware -------------
+  /* ------------- Saga Middleware ------------- */
 
   const sagaMiddleware = createSagaMiddleware()
   middleware.push(sagaMiddleware)
 
   /* ------------- Logger Middleware ------------- */
 
+  const __DEV__ = true
+
   if (__DEV__) {
-      // the logger master switch
-      const USE_LOGGING = true
-      // silence these saga-based messages
       // create the logger
       const logger = createLogger()
       middleware.push(logger)

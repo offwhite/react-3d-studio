@@ -3,11 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-redux": "^5.0.5",
     "react-three": "^0.9.7",
     "react-three-renderer": "^3.1.0",
-    "three": "^0.85.2"
+    "redux-logger": "^3.0.6",
+    "redux-saga": "^0.15.3",
+    "reduxsauce": "^0.5.0",
+    "seamless-immutable": "^7.1.2",
+    "three": "^0.85.2",
+    "three-transformcontrols": "^0.78.1"
   },
   "devDependencies": {
     "react-scripts": "1.0.4"
@@ -17,5 +24,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "globals": [
+      "__DEV__"
+    ]
   }
 }

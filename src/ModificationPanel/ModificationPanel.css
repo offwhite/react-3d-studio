@@ -1,0 +1,92 @@
+.modificationPanel {
+  position: absolute;
+  width: 300px;
+  right: 0;
+  top: 0;
+  height: 100%;
+  background-color: #a3aeb9;
+  margin-top: 50px;
+  box-shadow: 0 0 10px 0px black;
+  box-sizing: border-box;
+  padding: 10px;
+  padding-top: 20px;
+}
+
+.primitivesList{
+  border: solid 1px #666666;
+  background-color: #cccccc;
+  height: 300px;
+  overflow-y: scroll;
+}
+.primitivesList > div {
+  background-color: #c7cbce;
+  color: #333333;
+  padding: 8px;
+  border-bottom: solid 1px #333333;
+  cursor: pointer;
+  position: relative;
+}
+.primitivesList .selected{
+  background-color: #2f404c;
+  color: #cccccc;
+}
+
+.primitivesList .deletePrimitive{
+  display: none;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  border-radius: 100%;
+  overflow: hidden;
+  width: 25px;
+  height: 25px;
+  background-color: red;
+  box-shadow: 0 0 10px 0 black;
+}
+
+.PrimitivesExport{
+  margin: 10px 0;
+  height: calc(100% - 370px);
+  border: solid 1px #666666;
+  background-color: #cdcdcd;
+  padding: 10px;
+  overflow: scroll;
+  position: absolute;
+  top: 50px;
+  bottom: 50px;
+  left: 50px;
+  right: 50px;
+}
+
+.primitiveEditForm{
+  margin: 10px 0;
+  height: calc(100% - 370px);
+  border: solid 1px #666666;
+  background-color: #cdcdcd;
+}
+
+input {
+  width: 100%;
+  border: none;
+  padding: 5px;
+  font-size: 12px;
+  font-family: Helvetica;
+  box-sizing: border-box;
+}
+.inputRow{
+  float: left;
+  width: 100%;
+  border-bottom: solid 1px #999999;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.inputRow h3{
+  font-weight: normal;
+  font-size: 12px;
+  margin: 0 0 5px;
+}
+.spinnerRow input{
+  float: left;
+  width: 80px;
+  margin-right: 5px;
+}

@@ -34,6 +34,7 @@ class MouseInput extends Module {
     this._isReady = false;
     this._active = true;
     this._restrictIntersections = false;
+    this.intersectionsDirty = false;
     this._objectsToIntersect = null;
 
     this._restrictedIntersectionRecursive = false;
@@ -85,6 +86,10 @@ class MouseInput extends Module {
     this._objectsToIntersect = objects;
 
     this._restrictedIntersectionRecursive = recursive;
+  }
+
+  flagClearIntersetions(){
+    this.intersectionsDirty = true;
   }
 
   ready(scene, container, camera) {
@@ -234,6 +239,22 @@ class MouseInput extends Module {
 
   _getIntersections(mouseCoords) {
     const relativeMouseCoords = this._getRelativeMouseCoords(mouseCoords);
+
+    // check if the intersections are dirty
+    if( this.intersectionsDirty ) {
+      const newIntersections = []
+      for ( var i = 0, l = this._objectsToIntersect.length; i < l; i ++ ) {
+  			if(this._objectsToIntersect[ i ] !== null) {
+
+          newIntersections.push(this._objectsToIntersect[ i ])
+        }
+      }
+
+      console.log('MI, new primitives', newIntersections)
+
+      this._objectsToIntersect = newIntersections
+      this.intersectionsDirty = false
+    }
 
     this._raycaster.setFromCamera(relativeMouseCoords, this._camera);
 
